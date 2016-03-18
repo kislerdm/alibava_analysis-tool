@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/public/ilctools/!svn/ver/3029/ilcinstall/branches/eutel-git/examples/eutelescope
+END
+release-standalone.cfg
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/public/ilctools/!svn/ver/2987/ilcinstall/branches/eutel-git/examples/eutelescope/release-standalone.cfg
+END
+release-standalone-simulation.cfg
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/public/ilctools/!svn/ver/3029/ilcinstall/branches/eutel-git/examples/eutelescope/release-standalone-simulation.cfg
+END
+release-versions.py
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/public/ilctools/!svn/ver/3026/ilcinstall/branches/eutel-git/examples/eutelescope/release-versions.py
+END

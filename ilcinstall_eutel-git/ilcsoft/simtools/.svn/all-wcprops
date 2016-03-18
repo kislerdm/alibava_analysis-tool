@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/public/ilctools/!svn/ver/2931/ilcinstall/branches/eutel-git/ilcsoft/simtools
+END
+lcbase.py
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/public/ilctools/!svn/ver/2931/ilcinstall/branches/eutel-git/ilcsoft/simtools/lcbase.py
+END
+satellites.py
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/public/ilctools/!svn/ver/2931/ilcinstall/branches/eutel-git/ilcsoft/simtools/satellites.py
+END
+physsim.py
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/public/ilctools/!svn/ver/2931/ilcinstall/branches/eutel-git/ilcsoft/simtools/physsim.py
+END
+uranus.py
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/public/ilctools/!svn/ver/2931/ilcinstall/branches/eutel-git/ilcsoft/simtools/uranus.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/public/ilctools/!svn/ver/2931/ilcinstall/branches/eutel-git/ilcsoft/simtools/__init__.py
+END
+jsf.py
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/public/ilctools/!svn/ver/2931/ilcinstall/branches/eutel-git/ilcsoft/simtools/jsf.py
+END
+jupiter.py
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/public/ilctools/!svn/ver/2931/ilcinstall/branches/eutel-git/ilcsoft/simtools/jupiter.py
+END
+lclib.py
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/public/ilctools/!svn/ver/2931/ilcinstall/branches/eutel-git/ilcsoft/simtools/lclib.py
+END
+leda.py
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/public/ilctools/!svn/ver/2931/ilcinstall/branches/eutel-git/ilcsoft/simtools/leda.py
+END

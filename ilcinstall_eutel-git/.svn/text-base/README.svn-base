@@ -1,0 +1,94 @@
+##################################################
+#
+# Installation script for the ILC Software
+#
+# Author: Jan Engels, DESY
+# Date: Jan, 2007
+#
+#
+##################################################
+
+
+DESCRIPTION:
+	
+	Python script for installing the ILC Software in a
+	fully automated way with minimal user intervention.
+	
+	Completely written in Python (www.python.org) version 2.2.3
+
+USAGE:
+
+	The script can be called with the following syntax:
+	
+		ilcsoft-install [ -p, -i ] install.cfg
+
+		options description:
+			
+			-p to preview installation environment
+			-i to install the software
+
+
+    If called without options a summary of the installation is displayed
+
+
+    Examples of configuration files can be found under releases.
+
+
+
+USAGE EXAMPLES:
+
+
+
+###### Install the full ilc software tools + external dependencies on your local disk ##########
+
+    # note that mysql, java and cernlib installations are not supported in ilcinstall
+    # this packages need to be installed on your system. Please change the paths to this packages in
+    # the file releases/v01-16-01/release-versions.py
+
+    # for debian/ubuntu distributions you may need to install a few packages beforehand such as:
+    # apt-get install build-essential cmake subversion libmysqlclient-dev freeglut3-dev zlib1g-dev libqt4-dev cernlib-core-dev default-jdk libxpm-dev libxmu-dev lesstif2-dev doxygen latex2html
+
+    edit releases/v01-16-01/release-versions.py and modify ilcsoft_install_prefix, e.g.:
+
+        ilcsoft_install_prefix = "/scratch/ilcsoft/"    # version suffix will be added to prefix
+    
+    edit releases/v01-16-01/release-scratch.cfg and comment out any unneeded packages.
+
+    run:
+    ./ilcsoft-install releases/v01-16-01/release-scratch.cfg      # display installation summary
+    ./ilcsoft-install releases/v01-16-01/release-scratch.cfg -i   # install
+
+
+
+
+###### Install the core ilc software tools on your local disk using dependencies from /afs/desy.de/project/ilcsoft/sw/ #########
+
+        # ---- THIS ONLY WORKS WITH SL5 32/64BIT OR COMPATIBLE SYSTEMS ------------------------
+        #
+        #   tools are installed in afs under:
+        #
+        #   /afs/desy.de/project/ilcsoft/sw/
+        #
+        #      i386_gcc41_sl5        # i386 CPU, 32 bit, gcc4.1, SL5 and compatible
+        #      x86_64_gcc41_sl5      # i686 CPU, 64 bit, gcc4.1, SL5 and compatible
+        # -------------------------------------------------------------------------------------
+
+
+    edit releases/v01-16-01/release-versions.py and modify ilcsoft_install_prefix, e.g.:
+            
+        ilcsoft_install_prefix = "/scratch/ilcsoft/"   # version suffix will be added to prefix
+
+        edit releases/v01-16-01/release-ilcsoft.cfg and comment out any unneeded packages.
+
+    run:
+    ./ilcsoft-install releases/v01-16-01/release-ilcsoft.cfg      # display installation summary
+    ./ilcsoft-install releases/v01-16-01/release-ilcsoft.cfg -i   # install ilcsoft core tools (no external dependencies)
+
+
+DOCUMENTATION:
+
+Please find more detailed documentation under:
+
+http://ilcsoft.desy.de/portal/general_documentation/ilcinstall_documentation/
+
+

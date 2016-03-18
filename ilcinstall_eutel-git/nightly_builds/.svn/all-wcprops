@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/public/ilctools/!svn/ver/2999/ilcinstall/branches/eutel-git/nightly_builds
+END
+sl6-nb_release.cfg
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/public/ilctools/!svn/ver/2999/ilcinstall/branches/eutel-git/nightly_builds/sl6-nb_release.cfg
+END
+nb-release-osx.cfg
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/public/ilctools/!svn/ver/2931/ilcinstall/branches/eutel-git/nightly_builds/nb-release-osx.cfg
+END
+sl6-nb_debug.cfg
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/public/ilctools/!svn/ver/2999/ilcinstall/branches/eutel-git/nightly_builds/sl6-nb_debug.cfg
+END
+sl5_64bit-nb_release.cfg
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/public/ilctools/!svn/ver/2999/ilcinstall/branches/eutel-git/nightly_builds/sl5_64bit-nb_release.cfg
+END
+ubuntu12.04-nb_debug.cfg
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/public/ilctools/!svn/ver/2999/ilcinstall/branches/eutel-git/nightly_builds/ubuntu12.04-nb_debug.cfg
+END
+sl5_64bit-nb_debug.cfg
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/public/ilctools/!svn/ver/2999/ilcinstall/branches/eutel-git/nightly_builds/sl5_64bit-nb_debug.cfg
+END
+README
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/public/ilctools/!svn/ver/2931/ilcinstall/branches/eutel-git/nightly_builds/README
+END
+nbuild
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/public/ilctools/!svn/ver/2999/ilcinstall/branches/eutel-git/nightly_builds/nbuild
+END

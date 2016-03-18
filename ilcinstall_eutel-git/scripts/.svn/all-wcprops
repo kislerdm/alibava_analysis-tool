@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/public/ilctools/!svn/ver/2931/ilcinstall/branches/eutel-git/scripts
+END
+tagpackage.sh
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/public/ilctools/!svn/ver/2931/ilcinstall/branches/eutel-git/scripts/tagpackage.sh
+END
+check-jobs.sh
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/public/ilctools/!svn/ver/2931/ilcinstall/branches/eutel-git/scripts/check-jobs.sh
+END
+ilc-info-job.sh
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/public/ilctools/!svn/ver/2931/ilcinstall/branches/eutel-git/scripts/ilc-info-job.sh
+END
+pack2BinRelTool.py
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/public/ilctools/!svn/ver/2931/ilcinstall/branches/eutel-git/scripts/pack2BinRelTool.py
+END
+packSharedLibDeps.sh
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/public/ilctools/!svn/ver/2931/ilcinstall/branches/eutel-git/scripts/packSharedLibDeps.sh
+END
+send-info-job.sh
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/public/ilctools/!svn/ver/2931/ilcinstall/branches/eutel-git/scripts/send-info-job.sh
+END
+ilc-install-job.sh
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/public/ilctools/!svn/ver/2931/ilcinstall/branches/eutel-git/scripts/ilc-install-job.sh
+END
+send-install-job.sh
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/public/ilctools/!svn/ver/2931/ilcinstall/branches/eutel-git/scripts/send-install-job.sh
+END

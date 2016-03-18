@@ -1,0 +1,347 @@
+# =============================================================================
+#
+# examples/alibava
+#
+# =============================================================================
+#
+# Check the README for information
+#
+# =============================================================================
+#
+# Global section. Settings can be overwritten through task-specific sections
+# The python config parser interprets '%(NAME)s' as the corresponding variable
+# NAME. The variable 'eutelescopepath' is by default filled with the environment
+# variable EUTELESCOPE and should correspond to the installation path of
+# EUTelescope. Also, the variable '%(home)s' corresponds to the user's home
+# directory. The template file name can be set with TemplateFile = file.xml. The
+# default is '[task]-tmp.xml'
+[DEFAULT]
+
+
+# The path to this config file
+BasePath		= /data/user/dkisler/analysis/Kisler_version/alibava-cms
+
+# Set the folder which contains the raw/native data files
+NativePath              = /data/user/kislerdm/alibava/data/Oct2015
+
+
+# The location of the steering templates
+TemplatePath		= %(BasePath)s/steering-templates
+
+
+# The GEAR file describing the detector geometry, this is passed from the
+# runlist.csv A file with only the telescope planes is needed for tracking.
+GearFile    	        = @GearGeoFile@
+GearFileTelescopeOnly	= gear_telescope.xml
+
+
+# Path to the GEAR files
+GearFilePath    	= %(BasePath)s/gearfiles
+
+
+# The XML file with histogram information
+HistoInfoFile   	= %(BasePath)s/histoinfo/histoinfo_telescope.xml
+
+
+# Formats the output; @RunNumber@ is the current run number padded with leading
+# zeros to 6 digits
+FilePrefix   	 	= run@RunNumber@	
+
+
+# Which run number to use for hot pixel determination
+HotpixelRunNumber	= @RunNumber@
+
+
+# Skip events in a run; set to 0 for all data
+SkipNEvents		= 0
+
+
+# Output subfolder structure
+DatabasePath		= ./output/test
+HistogramPath		= ./output/test
+LcioPath            	= ./output/test
+LogPath			= ./output/test
+
+
+# Limit processing of a run to a certain number of events. This global setting 
+# overrides any subsettings.
+MaxRecordNumber		= @Clulimit@
+
+
+# The verbosity used by the EUTelescope producers (i.e. MESSAGE, DEBUG, ERROR
+# with appended level from 0..9, e.g. MESSAGE5). If you set this to DEBUG0 but
+# you do not see any DEBUG messages, make sure that you set CMAKE_BUILD_TYPE to
+# Debug in the $EUTELESCOPE/CMakeList.txt file.
+Verbosity		= MESSAGE4
+
+
+######################################
+# Alibava Specifics
+######################################
+
+
+# Set the path to the ALiBaVa data. This assumes ALiBaVa and Telescope raw data 
+# are in the same folder. If not, change this.
+AlibavaNativeFolder	= %(NativePath)s
+
+
+# Alibava Histograms
+AlibavaHistoPath	= @HistogramPath@
+
+
+# Alibava Output Format
+Output			= @RunNumber@
+
+
+# Alibava LCIO Folder
+AlibavaLcioRawFolder	= @LcioPath@
+
+
+# Skip masked events?
+SkipMaskedEvents	= 0
+
+
+# The file with the Alibava histogram information
+AlibavaHistoInfoFile   	= %(BasePath)s/histoinfo/histoinfo_alibava.xml
+
+
+
+
+######################################
+# The ALiBaVa analysis chain:
+######################################
+
+######################################
+# Section for ALiBaVa ped conversion step
+# This outputs:
+#	lcio/rawX.slcio
+#	histograms/X-alibava-convert-ped.root
+######################################
+[convert-ped]
+
+
+
+######################################
+# Section for ALiBaVa pedestal
+# This outputs:
+#	lcio/runX.slcio
+#	lcio/pedX.slcio
+#	histograms/X-alibava-pedestal.root
+######################################
+[pedestal]
+
+MaxRecordNumber 	= 10001
+
+######################################
+# Section for ALiBaVa common mode
+# This outputs:
+#	lcio/runX-cmmd.slcio
+#	histograms/X-alibava-commonmode.root
+######################################
+[commonmode]
+MaxRecordNumber 	= 10001
+
+# Which method do we want to use?
+Method 			= slope
+
+
+
+######################################
+# Section for ALiBaVa pedestal2
+# This outputs:
+#	lcio/runX.slcio
+#	histograms/X-alibava-pedestal2.root
+######################################
+[pedestal2]
+
+MaxRecordNumber 	= 10001
+
+######################################
+# Section for ALiBaVa RS conversion step
+# This outputs:
+#	lcio/rawX.slcio
+#	histograms/X-alibava-converter.root
+######################################
+[converter]
+
+
+######################################
+# Section for ALiBaVa reconstruction
+# This outputs:
+#	lcio/runX.slcio
+#	histograms/X-alibava-reco.root
+######################################
+[reco]
+
+MaxEvent = 500001
+
+######################################
+# Section for ALiBaVa clustering
+# This outputs:
+#	lcio/runX-alibava-clustering.slcio
+#	histograms/X-alibava-clustering-N.root
+######################################
+[clustering]
+
+
+# We need an additional limit for reading in the telescope
+MaxRecordNumber 	= @Clulimit@
+
+# The polarity of our sensor, -1 for negative signals (p,y type), 1 for positve
+# (n-type)
+Polarity		= @Pol@
+
+
+# The filtering can be turned off for specific high angle runs...
+SetFilter2		= @Filter2@
+
+# Here set the signal/noise required for seed signal
+SeedSNRCut = 5 #5
+# signal/noise required for neigbour channels
+NeighbourSNRCut = 2.5 #SeedSNRCut*0.75
+
+
+######################################
+# The telescope analysis chain:
+######################################
+
+
+######################################
+# Section for telescope converter
+# This outputs:
+#	lcio/runX-converter.slcio
+#	histograms/X-telescope-converter.root
+######################################
+[telescope-converter]
+
+
+
+
+######################################
+# Section for telescope clustering
+# This outputs:
+#	lcio/runX-clustering.slcio
+#	histograms/X-telescope-clustering.root
+######################################
+[telescope-clustering]
+
+
+[telescope-hitmaker]
+
+#RunNumber = @TelescopeRun@
+
+######################################
+# The combined analysis chain:
+######################################
+
+######################################
+# Section for merging ALiBaVa hits with telescope clusters
+# This outputs:
+#	lcio/runX-merge.slcio
+#	histograms/X-alibava-merge.root
+######################################
+[merger]
+
+##correlator
+[corr]
+
+[correlator]
+GearFile                = @GearFileName@_run@RunNumber@_pre.xml
+
+######################################
+# Section for hitmaker
+# This outputs:
+#	lcio/runX-hitmaker.slcio
+#	histograms/X-alibava-hitmaker.root
+#	database/runX-referencehit.slcio
+######################################
+[hitmaker]
+
+TelescopeRun = @TelescopeRun@
+
+######GBL fitter
+######################################
+# Section for gbl-align-triplet for the telescope planes
+######################################
+
+[align-tel-1]
+
+MaxEvent = 500000
+
+[align-tel-2]
+
+MaxEvent = 500000
+
+[align-tel-3]
+
+MaxEvent = 10000
+
+
+[align-DUT]
+
+MaxEvent = 500000
+
+refcut = 150.
+
+#####################################################
+
+
+######################################
+# Section for ALiBaVa RGH filtering
+# This outputs:
+#	lcio/runX-alibava-rghfiltered.slcio
+#	histograms/X-alibava-rghfiltered-N.root
+######################################
+[rghfilter]
+
+
+######################################
+# Section for ALiBaVa histogram maker
+# This outputs:
+#	lcio/runX-datahisto.slcio
+#	histograms/X-alibava-datahisto.root
+######################################
+[datahisto]
+
+
+# The polarity of our sensor, -1 for negative signals (p,y type), 1 for positve 
+# (n-type)
+Polarity		= @Pol@
+
+
+
+######################################
+# Section for ALiBaVa pedestal histogram maker
+# This outputs:
+#	lcio/runX-datahisto.slcio
+#	histograms/X-alibava-datahisto.root
+######################################
+[pedestalhisto]
+
+
+# The polarity of our sensor, -1 for negative signals (p,y type), 1 for positve 
+# (n-type)
+Polarity		= @Pol@
+
+######################################
+# Section for event visualisation with CED - check README for installation 
+# instructions.
+# No output
+######################################
+[event-viewer]
+
+# Wait for user input (true) or run auto (false)?
+User			= true
+
+
+######################################
+# Section for header analysis
+# This outputs:
+#	lcio/runX-headers.slcio
+#	histograms/X-alibava-header.root
+######################################
+[header]
+
+[getdutposition]
+
+[fakealign]

@@ -1,0 +1,14 @@
+K 10
+svn:ignore
+V 10
+ChangeLog
+
+K 13
+svn:mergeinfo
+V 178
+/ilcinstall/branches/eutel1.0-dev:2893-2924
+/ilcinstall/branches/v01-16-01:2639-2650
+/ilcinstall/tags/v01-16:2622-2638
+/ilcinstall/tags/v01-16-01:2651
+/ilcinstall/trunk:2931-2998
+END

@@ -1,0 +1,92 @@
+#! /usr/bin/python
+import os, sys
+import logging
+import commands
+from ilcsoft import *
+
+_version = "v01-17-05"
+
+_usage = """%prog [options] INSTALL_CONFIG_FILE
+if called with no options only an installation summary is shown
+"""
+
+# ---------- CONFIGURE COMMAND LINE OPTIONS ------------------------------
+from optparse import OptionParser
+parser = OptionParser( usage=_usage, version=_version )
+parser.add_option('-p', '--preview', action='store_true', help='preview installation')
+parser.add_option('-i', '--install', action='store_true', help='install the software')
+parser.add_option('-v', '--verbose', action='store_true', dest='verbose', help='run in DEBUG mode')
+parser.add_option('--log-cfg-file', help='file to configure logging settings')
+
+(options, args) = parser.parse_args()
+
+if len(args) != 1:
+    parser.error('incorrect number of arguments (-h for help)')
+# ------------------------------------------------------------------------
+
+
+if options.log_cfg_file:
+    logging.config.fileConfig( options.log_cfg_file )
+
+if options.verbose:
+    root_logger=logging.getLogger()
+    root_logger.setLevel(logging.DEBUG)
+    # define handler for writting messages to console
+    ch = logging.StreamHandler(sys.stdout)
+    # bind the console handler to the logger
+    root_logger.addHandler(ch)
+    # set the logging level
+    ch.setLevel( logging.DEBUG )
+
+
+config_file = os.path.abspath(args[0])
+   
+if( not os.path.exists(config_file) ):
+    parser.error( 'config file %s does not exist' % config_file )
+
+# some settings needed for reading nightly build cfg files
+date_iso8601 = commands.getoutput( "date +%F" )
+config_file_basename = config_file[config_file.rfind( '/' )+1:config_file.rfind(".")]
+config_file_extension = config_file[config_file.rfind(".")+1:]
+
+# desy afs directories
+ilcsoft_afs_path={}
+ilcsoft_afs_path['base']  = '/afs/desy.de/project/ilcsoft/sw'
+ilcsoft_afs_path['gcc34_32bit'] = os.path.normpath( os.path.join( ilcsoft_afs_path['base'] , 'i386_gcc34_sl4'   ))
+ilcsoft_afs_path['gcc41_32bit'] = os.path.normpath( os.path.join( ilcsoft_afs_path['base'] , 'i386_gcc41_sl5' ))
+ilcsoft_afs_path['gcc41_64bit'] = os.path.normpath( os.path.join( ilcsoft_afs_path['base'] , 'x86_64_gcc41_sl5' ))
+ilcsoft_afs_path['gcc44_64bit'] = os.path.normpath( os.path.join( ilcsoft_afs_path['base'] , 'x86_64_gcc44_sl6' ))
+ilcsoft_afs_path['gcc46_64bit'] = os.path.normpath( os.path.join( ilcsoft_afs_path['base'] , 'x86_64_gcc46_ub1204' ))
+
+ilcPath = None
+try:
+    import platform
+    sizeofint = platform.architecture()[0]
+    gccver = ''.join( platform.python_compiler().split()[-1].split('.')[:2] )
+    arch = 'gcc' + gccver + '_' + sizeofint
+    ilcPath = ilcsoft_afs_path[ arch ] + '/'
+except:
+    pass
+
+print '+ Running ilcsoft-install [ %s ]' % _version
+print '+ Read configuration file [ %s ]' % config_file
+execfile( config_file )
+
+# pass the name of the config file to ilcsoft.py
+ilcsoft.config_file = config_file
+ilcsoft.config_file_prefix = config_file_basename
+ilcsoft.config_file_suffix = config_file_extension
+
+# this is for initializing the modules
+# (called right after reading the config file)
+ilcsoft.init()
+
+# display an installation summary
+ilcsoft.summary()
+
+if options.preview :
+   ilcsoft.previewinstall()
+
+if options.install :
+    ilcsoft.makeinstall()
+

@@ -1,0 +1,50 @@
+###########################################
+# Python script for using ilcinstall to
+# perform nightly builds and send a mail
+# with the output to a list of users
+#
+# Author: Jan Engels, DESY
+###########################################
+
+How to use:
+
+1st:    copy nbuild script to directory where ilcsoft-install is located (cp nbuild ../)
+        edit the nbuild script and check if the settings meet your needs
+        * mail_addresses can also be set in the config file
+
+2nd:    use the template nb-debug.cfg and adapt it to your needs
+
+3rd:    create your cronjob
+
+        # configure crontab for current user
+        $ crontab -e
+
+        # example of a crontab file
+        SHELL=/bin/bash
+        # enter your email here for receiving output from cron jobs
+        MAILTO=your_email@blah.zzz
+        # for downloading the sources for the nightly builds, the cron user (used by the cronjob)
+        # needs to access some settings:
+        # for cvs downloads: $HOME/.cvspass
+        # for svn downloads with p12 certificate: $HOME/.subversion/servers and $HOME/.globus/usercert.p12
+        # if this settings are located in afs the cronjob needs an afs token to access them.
+        # the easiest way is to use k5crontab to define the cronjobs instead (just call k5crontab -e)
+        # if you do not have k5crontab then you need to relocate the HOME directory of cron to a non-afs
+        # directory and copy the needed settings to this directory.
+        # HOME=/scratch/cronhome
+        # some additional paths may be needed
+        # PATH=/sbin:/bin:/usr/sbin:/usr/bin
+         
+        # cron syntax is:
+        # mm hh MM YY dd
+        #
+        # examples:
+        # 00 * * * *    every hour (X:00)
+        # 30 2 * * *    dayly @ 2:30
+        # 00 4 * * 1    weekly (mondays @ 4:00)
+        # 15 2 1 * *    monthly (1st of the month @ 2:15)
+        # 00 5 * * 1-5  workdays @ 5:00
+       
+        # run daily at 2:00
+        00 2 * * * cd /path/to/ilcinstall && ./nbuild ./nightly_builds/nb-debug.cfg
+

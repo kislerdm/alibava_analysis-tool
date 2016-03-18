@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/public/ilctools/!svn/ver/2986/ilcinstall/branches/eutel-git/examples/slic
+END
+dev-scratch.cfg
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/public/ilctools/!svn/ver/2931/ilcinstall/branches/eutel-git/examples/slic/dev-scratch.cfg
+END
+release-scratch.cfg
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/public/ilctools/!svn/ver/2931/ilcinstall/branches/eutel-git/examples/slic/release-scratch.cfg
+END
+head-scratch.cfg
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/public/ilctools/!svn/ver/2986/ilcinstall/branches/eutel-git/examples/slic/head-scratch.cfg
+END
+hps-versions.py
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/public/ilctools/!svn/ver/2986/ilcinstall/branches/eutel-git/examples/slic/hps-versions.py
+END
+dev-versions.py
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/public/ilctools/!svn/ver/2986/ilcinstall/branches/eutel-git/examples/slic/dev-versions.py
+END
+hps-scratch.cfg
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/public/ilctools/!svn/ver/2986/ilcinstall/branches/eutel-git/examples/slic/hps-scratch.cfg
+END
+release-versions.py
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/public/ilctools/!svn/ver/2986/ilcinstall/branches/eutel-git/examples/slic/release-versions.py
+END
+head-versions.py
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/public/ilctools/!svn/ver/2986/ilcinstall/branches/eutel-git/examples/slic/head-versions.py
+END

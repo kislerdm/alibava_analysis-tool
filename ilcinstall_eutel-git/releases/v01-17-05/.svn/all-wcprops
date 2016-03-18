@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/public/ilctools/!svn/ver/2998/ilcinstall/branches/eutel-git/releases/v01-17-05
+END
+release-ilcsoft.cfg
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/public/ilctools/!svn/ver/2986/ilcinstall/branches/eutel-git/releases/v01-17-05/release-ilcsoft.cfg
+END
+release-ubuntu-ilcsoft.cfg
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/public/ilctools/!svn/ver/2986/ilcinstall/branches/eutel-git/releases/v01-17-05/release-ubuntu-ilcsoft.cfg
+END
+release-scratch.cfg
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/public/ilctools/!svn/ver/2986/ilcinstall/branches/eutel-git/releases/v01-17-05/release-scratch.cfg
+END
+release-base.cfg
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/public/ilctools/!svn/ver/2986/ilcinstall/branches/eutel-git/releases/v01-17-05/release-base.cfg
+END
+release-ubuntu-base.cfg
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/public/ilctools/!svn/ver/2986/ilcinstall/branches/eutel-git/releases/v01-17-05/release-ubuntu-base.cfg
+END
+release-versions.py
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/public/ilctools/!svn/ver/2998/ilcinstall/branches/eutel-git/releases/v01-17-05/release-versions.py
+END
