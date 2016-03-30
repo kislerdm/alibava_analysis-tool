@@ -130,78 +130,6 @@ namespace eutelescope {
       int planenumber;
     };
 
-   
-    /*
-    class trackfitter
-    {
-    public:
-      ~trackfitter()
-      {}
-      trackfitter()
-      {}
-      trackfitter(hit *h, unsigned int num)
-      {
-        hitsarray = h;
-        n = num;
-      }
-
-      double dot(const double *a, const double *b) const
-      {
-        return (a[0] * b[0] + a[1] * b[1] + a[2] * b[2]);
-      }
-      double fit (double *x, double *p)
-      {
-        double chi2 = 0.0;
-   
-        const unsigned int n = 3;
-
-        const double b0 = x[0];
-        const double b1 = x[1];
-        const double b2 = 0.0;
-    
-        const double alpha = x[2];
-        const double beta =  x[3];
-
-        const double c0 = TMath::Sin(beta);
-        const double c1 = -1.0*TMath::Cos(beta) * TMath::Sin(alpha);
-        const double c2 = TMath::Cos(alpha) * TMath::Cos(beta);
-    
-        double c[n] = {c0, c1, c2}; 
-        for(size_t i = 0; i < n;i++)
-          {
-            const double p0 = hitsarray[i].x;
-            const double p1 = hitsarray[i].y;
-            const double p2 = hitsarray[i].z;
-        
-            const double resol_x = hitsarray[i].resolution_x;
-            const double resol_y = hitsarray[i].resolution_y;
-            const double resol_z = hitsarray[i].resolution_z;
-        
-            //DP const double p[n] = {p0, p1, p2}; 
-        
-            const double pmb[n] = {p0-b0, p1-b1, p2-b2}; //p - b
-        
-            const double coeff = dot(c, pmb);
-            const double t[n] = {
-              b0 + c0 * coeff - p0,
-              b1 + c1 * coeff - p1,
-              b2 + c2 * coeff - p2
-            }; 
-        
-            //sum of distances divided by resolution^2
-            chi2 += t[0]*t[0] / pow(resol_x,2) 
-              + t[1]*t[1] / pow(resol_y,2) 
-              + t[2]*t[2] / pow(resol_z,2);
-          }
- 
-        return chi2;
-      }
-    private:
-      //std::vector<hit> hitsarray;
-    hit *hitsarray;
-    unsigned int n;
-    };
-    */
 #endif
 
     //! Variables for hit parameters
@@ -331,6 +259,9 @@ namespace eutelescope {
      */
     void bookHistos();
 
+    //!rootObject where to store histos for putting histos to sub-folders
+    std::map<std::string , TObject * > _rootObjectMap;
+
 
   protected:
 
@@ -376,6 +307,8 @@ namespace eutelescope {
 
 
     // parameters
+    //shall mille be initialized or not
+    int _milleInit;
 
     //DUT parameters:
     std::string _sensetiveAxis;
@@ -393,6 +326,9 @@ namespace eutelescope {
                                                 //set by the user.
     std::vector<int > _FixedPlanes; //only for internal usage
     std::vector<int > _FixedPlanes_sensorIDs; //this is going to be
+    //GEAR planes ID
+    int _GEARidDUT;
+    int _GEARidREF;
     //set by the user.
 
     double _eBeam; // DP
@@ -400,6 +336,7 @@ namespace eutelescope {
     double _driCut;
     double _sixCut;
     double _tridutCut;
+    double _dridutCut;
     double _drirefCut;
 
     int _maxTrackCandidates;
@@ -533,8 +470,10 @@ namespace eutelescope {
     static std::string _residualYLocalname;
     static std::string _residualZLocalname;
 #endif
-
+    //numb of all planes taken from the gear file
     int _nPlanes;
+    //numb. of planes which hits are being used for analysis
+    int nPl;
 
     std::vector<std::vector<double> > _xPos;
     std::vector<std::vector<double> > _yPos;

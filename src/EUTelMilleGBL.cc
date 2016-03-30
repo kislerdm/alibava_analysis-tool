@@ -87,6 +87,9 @@
 #include <TMatrixD.h>
 #include <TVector3.h>
 #include <TRotation.h>
+#include "TH1D.h"
+#include "TH2D.h"
+#include "TObject.h"
 #endif
 
 // system includes <>
@@ -111,39 +114,59 @@ using namespace eutelescope;
 
 // definition of static members mainly used to name histograms
 #if defined(USE_AIDA) || defined(MARLIN_USE_AIDA)
+//histos to show proj to pl0
+TH1D * dx01Hist;
+TH1D * dy01Hist;
+TH1D * dx02Hist;
+TH1D * dy02Hist;
+TH1D * dx03Hist;
+TH1D * dy03Hist;
+TH1D * dx04Hist;
+TH1D * dy04Hist;
+TH1D * dx05Hist;
+TH1D * dy05Hist;
+TH1D * dx06Hist; //REF
+TH1D * dy06Hist;
+TH1D * dx07Hist; //DUT
+TH1D * dy07Hist;
+//triplets
+//triplet
+TH1D * triSlopeXHist;
+TH1D * triSlopeYHist;
+TH1D * tridxHist;
+TH1D * tridyHist;
+TH1D * tridx_noCut_Hist;
+TH1D * tridy_noCut_Hist;
+TH1D * tridr_noCut_Hist;
+TH1D * ntriHist;
+//driplet
+TH1D * driSlopeXHist;
+TH1D * driSlopeYHist;
+TH1D * dridxHist;
+TH1D * dridyHist;
+TH1D * dridx_noCut_Hist;
+TH1D * dridy_noCut_Hist;
+TH1D * dridr_noCut_Hist;
+TH1D * ndriHist;
+//straight line tracks selection
+TH1D * sixdxHist;
+TH1D * sixdyHist;
+TH1D * sixdx_noCut_Hist;
+TH1D * sixdy_noCut_Hist;
+TH1D * sixdr_noCut_Hist;
+TH1D * sixkxHist;
+TH1D * sixkyHist;
+TH1D * nmHist;
 
-AIDA::IHistogram1D * dx01Hist;
-AIDA::IHistogram1D * dy01Hist;
-AIDA::IHistogram1D * dx02Hist;
-AIDA::IHistogram1D * dy02Hist;
-AIDA::IHistogram1D * dx03Hist;
-AIDA::IHistogram1D * dy03Hist;
-AIDA::IHistogram1D * dx04Hist;
-AIDA::IHistogram1D * dy04Hist;
-AIDA::IHistogram1D * dx05Hist;
-AIDA::IHistogram1D * dy05Hist;
-
-AIDA::IHistogram1D * tridxHist;
-AIDA::IHistogram1D * tridyHist;
-AIDA::IHistogram1D * tridx_noCut_Hist;
-AIDA::IHistogram1D * tridy_noCut_Hist;
-AIDA::IHistogram1D * tridr_noCut_Hist;
-AIDA::IHistogram1D * ntriHist;
-
-AIDA::IHistogram1D * dridxHist;
-AIDA::IHistogram1D * dridyHist;
-AIDA::IHistogram1D * dridx_noCut_Hist;
-AIDA::IHistogram1D * dridy_noCut_Hist;
-AIDA::IHistogram1D * dridr_noCut_Hist;
-AIDA::IHistogram1D * ndriHist;
-
-AIDA::IHistogram1D * sixdxHist;
-AIDA::IHistogram1D * sixdyHist;
-AIDA::IHistogram1D * sixdx_noCut_Hist;
-AIDA::IHistogram1D * sixdy_noCut_Hist;
-AIDA::IHistogram1D * sixdr_noCut_Hist;
-AIDA::IHistogram1D * sixkxHist;
-AIDA::IHistogram1D * sixkyHist;
+//How many tracks (matched triplests) were found per event when the hits on DUT are presented
+TH1D * hTripletsMatched_DUT;
+TH2D * hTripletsMatched_DUT_2D;
+//How many tracks (matched triplests) were found per event when the hits on REF plane are presented
+TH1D * hTripletsMatched_REF;
+TH2D * hTripletsMatched_REF_2D;
+//How many tracks (matched triplests) were found per event when the hits on DUT and REF plane are presented
+TH1D * hTripletsMatched_DUT_REF;
+TH2D * hTripletsMatched_DUT_REF_2D;
 
 AIDA::IHistogram1D * selxHist;
 AIDA::IHistogram1D * selyHist;
@@ -231,18 +254,6 @@ AIDA::IHistogram1D * gblkx4Hist;
 AIDA::IHistogram1D * gblkx5Hist;
 AIDA::IHistogram1D * gblkx6Hist;
 
-AIDA::IHistogram1D * nmHist;
-
-//How many tracks (matched triplests) were found per event when the hits on DUT are presented
-AIDA::IHistogram1D * hTripletsMatched_DUT;
-AIDA::IHistogram2D * hTripletsMatched_DUT_2D;
-//How many tracks (matched triplests) were found per event when the hits on REF plane are presented
-AIDA::IHistogram1D * hTripletsMatched_REF;
-AIDA::IHistogram2D * hTripletsMatched_REF_2D;
-//How many tracks (matched triplests) were found per event when the hits on DUT and REF plane are presented
-AIDA::IHistogram1D * hTripletsMatched_DUT_REF;
-AIDA::IHistogram2D * hTripletsMatched_DUT_REF_2D;
-
 //track matching to REF
 AIDA::IHistogram1D * hTrk_REF;
 AIDA::IHistogram1D * hTrk_REF_dx_noCut;
@@ -253,6 +264,10 @@ AIDA::IHistogram1D * hTrk_REF_dy;
 AIDA::IHistogram1D * hTrk_REF_dr;
 //track matching to DUT
 AIDA::IHistogram1D * hTrk_DUT;
+AIDA::IHistogram1D * hTrk_DUT_dy_triplet_noCut;
+AIDA::IHistogram1D * hTrk_DUT_dx_triplet_noCut;
+AIDA::IHistogram1D * hTrk_DUT_dy_driplet_noCut;
+AIDA::IHistogram1D * hTrk_DUT_dx_driplet_noCut;
 
 #endif
 
@@ -313,6 +328,7 @@ EUTelMilleGBL::EUTelMilleGBL(): Processor("EUTelMilleGBL") {
             "EUTelMilleGBL uses the MILLE program to write data files for MILLEPEDE II.";
 
     // choose input mode
+
     registerOptionalParameter("InputMode","Selects the source of input hits."
                               "\n0 - hits read from hitfile with simple trackfinding. "
                               "\n1 - hits read from output of tracking processor. "
@@ -332,16 +348,13 @@ EUTelMilleGBL::EUTelMilleGBL(): Processor("EUTelMilleGBL") {
                             "Track collection name",
                             _trackCollectionName,std::string("fittracks"));
 
-    // parameters
+    registerProcessorParameter( "AlignOrTrk", \
+                                "Alignment or tracking? Shall mille be used or not? 1 - alignment (mille is on, default), 0 - tracking (mille is off)",
+                                _milleInit, int(1));
 
+    registerProcessorParameter( "EventMaxNumb", "Max number of events to be processed", _nmax, int( 500000));
 
-    registerProcessorParameter( "EventMaxNumb",
-                                "Max number of events to be processed",
-                                _nmax, int( 500000));
-
-    registerProcessorParameter( "Ebeam",
-                                "Beam energy [GeV]",
-                                _eBeam, static_cast < double >( 4.0));
+    registerProcessorParameter( "Ebeam", "Beam energy [GeV]", _eBeam, static_cast < double >( 4.0));
 
     registerOptionalParameter("DistanceMax","Maximal allowed distance between hits entering the fit per 10 cm space between the planes.",
                               _distanceMax, static_cast <float> (2000.0));
@@ -353,6 +366,9 @@ EUTelMilleGBL::EUTelMilleGBL(): Processor("EUTelMilleGBL") {
 
     registerOptionalParameter("FixedPlanes","Fix sensor planes in the fit according to their sensor ids.",_FixedPlanes_sensorIDs ,std::vector<int>());
 
+    registerOptionalParameter("GearID_DUT","DUT ID in the gear file.",_GEARidDUT, int(7));
+
+    registerOptionalParameter("GearID_REF","REF ID in the gear file.",_GEARidREF, int(8));
 
     registerOptionalParameter("MaxTrackCandidatesTotal","Maximal number of track candidates (Total).",_maxTrackCandidatesTotal, static_cast <int> (1000000));
     registerOptionalParameter("MaxTrackCandidates","Maximal number of track candidates.",_maxTrackCandidates, static_cast <int> (4000));
@@ -460,6 +476,7 @@ EUTelMilleGBL::EUTelMilleGBL(): Processor("EUTelMilleGBL") {
     registerOptionalParameter( "driCut", "Downstream triplet residual cut [um]", _driCut, double (400.0) );
     registerOptionalParameter( "sixCut", "Upstream-Downstream Track matching cut [um]", _sixCut, double (600.0) );
     registerOptionalParameter( "TriDutCut", "Upstream Track - DUT matching cut [um]", _tridutCut, double (50.0) );
+    registerOptionalParameter( "DriDutCut", "Dwonstream Track - DUT matching cut [um]", _dridutCut, double (50.0) );
     registerOptionalParameter( "DriRefCut", "Downstream Track - REF matching cut [um]", _drirefCut, double (50.0) );
 
     //Tel of DUT alignment? (assume that tel planes are fixed if DUT and REF are being alligned) 0 (default) - tel align, 1 - REF align, 2 - DUT align
@@ -493,54 +510,33 @@ void EUTelMilleGBL::init() {
 
     streamlog_out(MESSAGE4) << "assumed beam energy " << _eBeam << " GeV" <<  endl;
     //lets guess the number of planes
-    if( _inputMode == 0 || _inputMode == 2 ) { // we use inputMode 0
+    // the number of planes is got from the GEAR description and is
+    // the sum of the telescope reference planes and the DUT (if
+    // any)
+    _nPlanes = _siPlanesLayerLayout->getNLayers();
+    streamlog_out (MESSAGE4) << "n planes = " << _nPlanes <<endl;
 
-        // the number of planes is got from the GEAR description and is
-        // the sum of the telescope reference planes and the DUT (if
-        // any)
-        _nPlanes = _siPlanesLayerLayout->getNLayers();
-        streamlog_out (MESSAGE4) << "n planes = " << _nPlanes <<endl;
-
-        if( _useSensorRectangular.size() == 0 ) {
-            streamlog_out(MESSAGE4) << "No rectangular limits on pixels of sensorplanes applied" << endl;
-        }
-        else {
-            if( _useSensorRectangular.size() % 5 != 0) {
-                streamlog_out(WARNING2) << "Wrong number of arguments in RectangularLimits! Ignoring this cut!" << endl;
-            }
-            else {
-                streamlog_out(MESSAGE4) << "Reading in SensorRectangularCuts: " << endl;
-                int sensorcuts = _useSensorRectangular.size()/5;
-                for( int i = 0; i < sensorcuts; ++i) {
-                    int sensor = _useSensorRectangular.at(5*i+0);
-                    int A = _useSensorRectangular.at(5*i+1);
-                    int B = _useSensorRectangular.at(5*i+2);
-                    int C = _useSensorRectangular.at(5*i+3);
-                    int D = _useSensorRectangular.at(5*i+4);
-                    SensorRectangular r(sensor,A,B,C,D);
-                    r.print();
-                    _rect.addRectangular(r);
-                }
-            }
-        }
-
-    }
-    else if( _inputMode == 1 ) {
-        _nPlanes = _siPlanesParameters->getSiPlanesNumber();
-    }
-    else if(_inputMode == 3) {
-
-        // the number of planes is got from the GEAR description and is
-        // the sum of the telescope reference planes and the DUT (if
-        // any)
-        _nPlanes = _siPlanesParameters->getSiPlanesNumber();
-        if( _siPlanesParameters->getSiPlanesType() == _siPlanesParameters->TelescopeWithDUT ) {
-            ++_nPlanes;
-        }
+    if( _useSensorRectangular.size() == 0 ) {
+        streamlog_out(MESSAGE4) << "No rectangular limits on pixels of sensorplanes applied" << endl;
     }
     else {
-        streamlog_out (MESSAGE4) << "unknown input mode " << _inputMode << endl;
-        exit(-1);
+        if( _useSensorRectangular.size() % 5 != 0) {
+            streamlog_out(WARNING2) << "Wrong number of arguments in RectangularLimits! Ignoring this cut!" << endl;
+        }
+        else {
+            streamlog_out(MESSAGE4) << "Reading in SensorRectangularCuts: " << endl;
+            int sensorcuts = _useSensorRectangular.size()/5;
+            for( int i = 0; i < sensorcuts; ++i) {
+                int sensor = _useSensorRectangular.at(5*i+0);
+                int A = _useSensorRectangular.at(5*i+1);
+                int B = _useSensorRectangular.at(5*i+2);
+                int C = _useSensorRectangular.at(5*i+3);
+                int D = _useSensorRectangular.at(5*i+4);
+                SensorRectangular r(sensor,A,B,C,D);
+                r.print();
+                _rect.addRectangular(r);
+            }
+        }
     }
 
     // an associative map for getting also the sensorID ordered
@@ -556,7 +552,7 @@ void EUTelMilleGBL::init() {
     //lets sort the array with increasing z
     //sort(_siPlaneZPosition.begin(), _siPlaneZPosition.end());
 
-    streamlog_out (DEBUG1) << "planes sorted along z, tel planes come first, then DUT, REF is the last :" << endl;
+    streamlog_out (DEBUG1) << "planes sorted along z, tel planes come first, then REF, DUT is the last (this order should be in GEAR) :" << endl;
     for( size_t i = 0; i < _siPlaneZPosition.size(); i++ ) {
         _orderedSensorID_wo_excluded.push_back(_siPlanesLayerLayout->getID(i));
         streamlog_out (DEBUG1) << i << "geomID = " << _orderedSensorID_wo_excluded.at(i) << "  Z [mm] = " << _siPlaneZPosition[i] << endl;
@@ -583,56 +579,6 @@ void EUTelMilleGBL::init() {
             ++counter;
         }
     }
-    //    int nexcl_pl = _excludePlanes_sensorIDs.size();
-    //    streamlog_out (MESSAGE4) << "ExcludedPlanes " << nexcl_pl << endl;
-    //    for( size_t i = 0; i < _excludePlanes_sensorIDs.size(); i++ ) {
-    //        streamlog_out (MESSAGE4) << "plane " << _excludePlanes_sensorIDs[i] << " excluded\n";
-    //        map< double, int >::iterator iter = sensorIDMap.begin();
-    //        int counter = 0;
-    //        while ( iter != sensorIDMap.end() ) {
-    //            if( iter->second == _excludePlanes_sensorIDs[i]) {
-    //                _excludePlanes.push_back(counter);
-    //                break;
-    //            }
-    //            ++iter;
-    //            ++counter;
-    //        }
-    //    }
-
-    //    // strip from the map the sensor id already sorted.
-    //    map< double, int >::iterator iter = sensorIDMap.begin();
-    //    int counter = 0;
-    //    while ( iter != sensorIDMap.end() ) {
-
-    //        bool excluded = false;
-    //        for( size_t i = 0; i < _excludePlanes.size(); i++) {
-    //            if(_excludePlanes[i] == counter) {
-    //                // printf("excludePlanes %2d of %2d (%2d) \n", i, _excludePlanes_sensorIDs.size(), counter );
-    //                excluded = true;
-    //                break;
-    //            }
-    //        }
-    //        if(!excluded) {_orderedSensorID_wo_excluded.push_back( iter->second );}
-
-    //        _orderedSensorID.push_back( iter->second );
-
-    //        ++iter;
-    //        ++counter;
-    //    }
-    //check
-    //    for(int i = 0; i < _nPlanes; i++)
-    //    {
-    //        streamlog_out(DEBUG0) << "Check the _orderedSensorID_wo_excluded GeomID order"<<endl
-    //                                 <<"counter = " << i << "GearID = " << _orderedSensorID_wo_excluded.at(i) << endl;
-    //        streamlog_out(DEBUG0) << "Check the _orderedSensorID order"<<endl
-    //                                 <<"counter = " << i << "GearID = " << _orderedSensorID.at(i) << endl;
-    //    }
-
-    //consistency
-    //  if( ( (int)_siPlaneZPosition.size() - nexcl_pl ) !=  _nPlanes   ) {
-    //    streamlog_out( ERROR2 ) << "the number of detected planes (after exclusion) is " << _nPlanes << " but only " << _siPlaneZPosition.size() << " layer z positions were found!"  << endl;
-    //    exit(-1);
-    //  }
 
 #endif
 
@@ -647,7 +593,7 @@ void EUTelMilleGBL::init() {
     // Initialize number of excluded planes
     _nExcludePlanes = _excludePlanes.size();
 
-    streamlog_out( MESSAGE2 ) << "Number of planes excluded from the alignment fit: " << _nExcludePlanes << endl;
+    streamlog_out( MESSAGE4 ) << "Number of planes excluded from the alignment fit: " << _nExcludePlanes << endl;
 
     // Initialise Mille statistics:
     _nMilleTracksperEvent = 0;
@@ -674,13 +620,15 @@ void EUTelMilleGBL::init() {
 
     // booking histograms
     bookHistos();
+    if(_milleInit == 1)
+    {
+        streamlog_out( MESSAGE4 ) << "Initialising Mille..." << endl;
 
-    streamlog_out( MESSAGE2 ) << "Initialising Mille..." << endl;
+        unsigned int reserveSize = 800000;
+        milleGBL = new gbl::MilleBinary( _binaryFilename, reserveSize );
 
-    unsigned int reserveSize = 800000;
-    milleGBL = new gbl::MilleBinary( _binaryFilename, reserveSize );
-
-    streamlog_out( MESSAGE2 ) << "The filename for the binary file is: " << _binaryFilename.c_str() << endl;
+        streamlog_out( MESSAGE4 ) << "The filename for the binary file is: " << _binaryFilename.c_str() << endl;
+    }
 
     for(int i = 0; i < _maxTrackCandidates; i++) {
         _xPos.push_back(std::vector<double>(_nPlanes,0.0));
@@ -703,7 +651,7 @@ void EUTelMilleGBL::init() {
             _distanceMaxVec.push_back(_distanceMax);
         }
     }
-    streamlog_out( MESSAGE2 ) << "end of init" << endl;
+    streamlog_out( MESSAGE4 ) << "end of init" << endl;
 }
 
 
@@ -770,7 +718,9 @@ void EUTelMilleGBL::processEvent( LCEvent * event ) {
                                   << setw(6) << setiosflags(ios::right)
                                   << event->getRunNumber()
                                   << ", currently having "
-                                  << _nMilleTracksTotal << " tracks "
+                                  << _nMilleTracksTotal << " tel. tracks; "
+                                  << ntrk_REF_Total << " tracks with REF assigned; "
+                                  << ntrk_DUT_Total << " tracks with DUT assigned."
                                   << endl;
     }
 
@@ -812,154 +762,126 @@ void EUTelMilleGBL::processEvent( LCEvent * event ) {
         return;
     }
 
-    std::vector<std::vector<EUTelMilleGBL::HitsInPlane> > _hitsArray(_nPlanes - _nExcludePlanes, std::vector<EUTelMilleGBL::HitsInPlane>() );
+    std::vector<std::vector<EUTelMilleGBL::HitsInPlane> > _hitsArray(_nPlanes , std::vector<EUTelMilleGBL::HitsInPlane>() );
 
     std::vector<int> indexconverter (_nPlanes,-1);
-    streamlog_out (DEBUG0) << "checking index converter : " << endl;
+    streamlog_out (DEBUG3) << "checking index converter : " << endl;
     for( int i = 0; i < _nPlanes; i++ ) {
+        if ((_aligntype == 0) || (_aligntype == 1)) {
+            if(_siPlanesLayerLayout->getID(i) < (_nPlanes-2)){ indexconverter[i] = i; }
+            else if(_siPlanesLayerLayout->getID(i) == _GEARidREF) { indexconverter[i] = _nPlanes-2; }
+            else if(_siPlanesLayerLayout->getID(i) == _GEARidDUT) { indexconverter[i] = _nPlanes-1; }
+        }
+        else if (_aligntype == 2) {
+            if(_siPlanesLayerLayout->getID(i) < (_nPlanes/2-1)){ indexconverter[i] = i; } //tel planes 0-2
+            else if(_siPlanesLayerLayout->getID(i) == _GEARidDUT) { indexconverter[i] = _nPlanes/2 - 1; } //dut comes after the tel. pl. 2
+            else if( (_siPlanesLayerLayout->getID(i) < (_nPlanes-2)) && ((_siPlanesLayerLayout->getID(i) > (_nPlanes/2-2))))
+            { indexconverter[i] = i + 1 ; } //tel planes 3-5
+            else if(_siPlanesLayerLayout->getID(i) == _GEARidREF) { indexconverter[i] = _nPlanes-1; } //ref
+        }
 
-        if(_siPlanesLayerLayout->getID(i) < 6){ indexconverter[i] = i; }
-        else if(_siPlanesLayerLayout->getID(i) == 7) { indexconverter[i] = _nPlanes-1; } //dut
-        else if(_siPlanesLayerLayout->getID(i) == 8) { indexconverter[i] = _nPlanes-2; } //ref
-
-       streamlog_out (DEBUG0)  << "indexconverter(i=" <<i<< ") : " << indexconverter[i] <<
-                                  " geomID = " << _siPlanesLayerLayout->getID(i) <<endl;
+        streamlog_out (DEBUG3)  << "indexconverter(i=" <<i<< ") : " << indexconverter[i] <<
+                                   " gearID = " << _siPlanesLayerLayout->getID(i) <<endl;
     }
 
+    for( size_t i = 0; i < _hitCollectionName.size(); i++ ) {
 
+        LCCollection* collection;
+        try {
+            collection = event->getCollection(_hitCollectionName[i]);
+        } catch (DataNotAvailableException& e) {
+            //	streamlog_out( WARNING2 ) << "No input collection "
+            //			  << _hitCollectionName[i] << " found for event "
+            //			  << event->getEventNumber()
+            //			  << " in run " << event->getRunNumber() << endl;
+            throw SkipEventException(this);
+        }
+        //array of hits on plane
+        HitsInPlane hitsInPlane;
 
-    //  printf("887: excludePlanes %2d  \n", _nExcludePlanes );
-    //  if( _nExcludePlanes > 0 )
-    //  {
-//    int icounter = 0;
-//    for( int i = 0; i < _nPlanes; i++ ) {
-//        int excluded = 0; //0 - not excluded, 1 - excluded
-//        if( _nExcludePlanes > 0 ) {
-//            for( int helphelp = 0; helphelp < _nExcludePlanes; helphelp++ ) {
-//                if( i == _excludePlanes[helphelp] ) {
-//                    excluded = 1;
-//                    break;//leave the for loop
-//                }
-//            }
-//        }
-//        if( excluded == 1 )
-//            indexconverter[i] = -1;
-//        else {
-//            indexconverter[i] = icounter;
-//            icounter++;
-//        }
-//    }
-    //  }
+        // check if running in input mode 0
+        if( _inputMode == 0 ) {
 
-    if( _inputMode != 1 && _inputMode != 3 ) // we use _inputMode 0
+            // loop over all hits in collection:
+            streamlog_out (DEBUG3) << "checking the hits writing to the hitsArrays. " << " Event = " << event->getEventNumber() << endl;
+            streamlog_out (DEBUG3) << "Numb of hits (all planes) = " << collection->getNumberOfElements() << endl;
 
-        for( size_t i = 0; i < _hitCollectionName.size(); i++ ) {
+            for( int iHit = 0; iHit < collection->getNumberOfElements(); iHit++ ) {
 
-            LCCollection* collection;
-            try {
-                collection = event->getCollection(_hitCollectionName[i]);
-            } catch (DataNotAvailableException& e) {
-                //	streamlog_out( WARNING2 ) << "No input collection "
-                //			  << _hitCollectionName[i] << " found for event "
-                //			  << event->getEventNumber()
-                //			  << " in run " << event->getRunNumber() << endl;
-                throw SkipEventException(this);
-            }
-            int layerIndex = -1;
-            //array of hits on plane
-            HitsInPlane hitsInPlane;
+                //taking a hit from the hit collection(s)
+                TrackerHitImpl * hit = static_cast<TrackerHitImpl*> ( collection->getElementAt(iHit) );
+                //LCObjectVec clusterVector = hit->getRawHits();
 
-            // check if running in input mode 0 or 2
-            if( _inputMode == 0 ) {
+                // Getting positions of the hits.
+                hitsInPlane.measuredX = 1000 * hit->getPosition()[0]; // microns
+                hitsInPlane.measuredY = 1000 * hit->getPosition()[1]; // microns
+                hitsInPlane.measuredZ = 1000 * hit->getPosition()[2]; // microns
+                streamlog_out (DEBUG3) << "HIT#: " << iHit <<
+                                          " Input hits [mm] : x ; y ; z = "<< hit->getPosition()[0] << " ; " <<  hit->getPosition()[1] << " ; " << hit->getPosition()[2] << endl;
 
-                // loop over all hits in collection:
-
-                for( int iHit = 0; iHit < collection->getNumberOfElements(); iHit++ ) {
-
-                    //taking a hit from the hit collection(s)
-                    TrackerHitImpl * hit = static_cast<TrackerHitImpl*> ( collection->getElementAt(iHit) );
-
-                    LCObjectVec clusterVector = hit->getRawHits();
-
-                    double minDistance =  numeric_limits< double >::max();
-                    double * hitPosition = const_cast<double * > (hit->getPosition());
-
-                    //forming the vectors of hits corresponding to each plane
-                    for(  int i = 0; i < (int)_siPlaneZPosition.size(); i++ ) {
-                        double distance = std::abs( hitPosition[2] - _siPlaneZPosition[i] );
-                        if( distance < minDistance ) {
-                            minDistance = distance;
-                            layerIndex = i;
-                        }
+                //forming the vectors of hits corresponding to each plane
+                for(  int ipl = 0; ipl < _nPlanes; ipl++ ) {
+                    //hits on tel planes
+                    if( std::abs( hit->getPosition()[2] - _siPlaneZPosition[ipl]) < 10)
+                    {
+                        _hitsArray[indexconverter[ipl]].push_back( hitsInPlane );
                     }
-                    if( minDistance > 30 /* mm */ ) {
-                        // advise the user that the guessing wasn't successful
-                        streamlog_out( WARNING3 ) << "A hit was found " << minDistance << " mm far from the nearest plane\n"
-                                                     "Please check the consistency of the data with the GEAR file" << endl;
-                    }
+                } // end loop over tel. planes
+            } //loop over hits
+        }//mode 0
 
-                    // Getting positions of the hits.
-                    // ------------------------------
-                    hitsInPlane.measuredX = 1000 * hit->getPosition()[0]; // microns
-                    hitsInPlane.measuredY = 1000 * hit->getPosition()[1]; // microns
-                    hitsInPlane.measuredZ = 1000 * hit->getPosition()[2]; // microns
 
-                    if( indexconverter[layerIndex] != -1 )
-                        _hitsArray[indexconverter[layerIndex]].push_back( hitsInPlane );
-                } // end loop over all hits in collection
-
-            }//mode 0
-
-            else if( _inputMode == 2) {
+        // check if running in input mode 2
+        else if( _inputMode == 2) {
 
 #if defined( USE_ROOT ) || defined(MARLIN_USE_ROOT)
 
-                const float resolX = _testModeSensorResolution;
-                const float resolY = _testModeSensorResolution;
+            const float resolX = _testModeSensorResolution;
+            const float resolY = _testModeSensorResolution;
 
-                const float xhitpos = gRandom->Uniform(-3500.0,3500.0);
-                const float yhitpos = gRandom->Uniform(-3500.0,3500.0);
+            const float xhitpos = gRandom->Uniform(-3500.0,3500.0);
+            const float yhitpos = gRandom->Uniform(-3500.0,3500.0);
 
-                const float xslope = gRandom->Gaus(0.0,_testModeXTrackSlope);
-                const float yslope = gRandom->Gaus(0.0,_testModeYTrackSlope);
+            const float xslope = gRandom->Gaus(0.0,_testModeXTrackSlope);
+            const float yslope = gRandom->Gaus(0.0,_testModeYTrackSlope);
 
-                // loop over all planes
-                for( int help = 0; help < _nPlanes; help++ ) {
+            // loop over all planes
+            for( int help = 0; help < _nPlanes; help++ ) {
 
-                    // The x and y positions are given by the sums of the measured
-                    // hit positions, the detector resolution, the shifts of the
-                    // planes and the effect due to the track slopes.
-                    hitsInPlane.measuredX = xhitpos + gRandom->Gaus(0.0,resolX) + _testModeSensorXShifts[help] + _testModeSensorZPositions[help] * tan(xslope) - _testModeSensorGamma[help] * yhitpos - _testModeSensorBeta[help] * _testModeSensorZPositions[0];
-                    hitsInPlane.measuredY = yhitpos + gRandom->Gaus(0.0,resolY) + _testModeSensorYShifts[help] + _testModeSensorZPositions[help] * tan(yslope) + _testModeSensorGamma[help] * xhitpos - _testModeSensorAlpha[help] * _testModeSensorZPositions[help];
-                    hitsInPlane.measuredZ = _testModeSensorZPositions[help];
-                    if( indexconverter[help] != -1 )
-                        _hitsArray[indexconverter[help]].push_back( hitsInPlane );
+                // The x and y positions are given by the sums of the measured
+                // hit positions, the detector resolution, the shifts of the
+                // planes and the effect due to the track slopes.
+                hitsInPlane.measuredX = xhitpos + gRandom->Gaus(0.0,resolX) + _testModeSensorXShifts[help] + _testModeSensorZPositions[help] * tan(xslope) - _testModeSensorGamma[help] * yhitpos - _testModeSensorBeta[help] * _testModeSensorZPositions[0];
+                hitsInPlane.measuredY = yhitpos + gRandom->Gaus(0.0,resolY) + _testModeSensorYShifts[help] + _testModeSensorZPositions[help] * tan(yslope) + _testModeSensorGamma[help] * xhitpos - _testModeSensorAlpha[help] * _testModeSensorZPositions[help];
+                hitsInPlane.measuredZ = _testModeSensorZPositions[help];
+                if( indexconverter[help] != -1 )
+                    _hitsArray[indexconverter[help]].push_back( hitsInPlane );
 
-                    // ADDITIONAL PRINTOUTS
-                    // printf("plane:%3d hit:%3d %8.3f %8.3f %8.3f \n", help, indexconverter[help], hitsInPlane.measuredX,hitsInPlane.measuredY,hitsInPlane.measuredZ);
-                    _hitsArray[help].push_back(hitsInPlane);
-                    _telescopeResolX[help] = resolX;
-                    _telescopeResolY[help] = resolY;
-                } // end loop over all planes
+                // ADDITIONAL PRINTOUTS
+                // printf("plane:%3d hit:%3d %8.3f %8.3f %8.3f \n", help, indexconverter[help], hitsInPlane.measuredX,hitsInPlane.measuredY,hitsInPlane.measuredZ);
+                _hitsArray[help].push_back(hitsInPlane);
+                _telescopeResolX[help] = resolX;
+                _telescopeResolY[help] = resolY;
+            } // end loop over all planes
 
 #else // USE_ROOT
 
-                throw MissingLibraryException( this, "ROOT" );
+            throw MissingLibraryException( this, "ROOT" );
 
 #endif
 
-            } // end if check running in input mode 0 or 2
+        } // end if check running in input mode 2
 
-        }//loop over hits
+    }//loop over hit collection(s)
 
     //debugging
-    streamlog_out( DEBUG0 ) << "hits per plane: " << endl;
+    streamlog_out( DEBUG3 ) << "Checking the hitsArray(s) per plane (the hits we use for calculations): " << endl;
     for(size_t j = 0; j < _nPlanes; j++)
     {
-        streamlog_out( DEBUG0 ) << "Plane ID = " << j << " : " << "NumbOfHits : " << _hitsArray[j].size() << "  " << endl;
+        streamlog_out( DEBUG3 ) << "Plane gearID = " << _siPlanesLayerLayout->getID(j) << ", Order index = " << indexconverter[j] << " : " << "Numb of stored hits = " << _hitsArray[j].size() << ". " << "Hits coordinates [um] :"<< endl;
         for( size_t i = 0; i < _hitsArray[j].size(); i++ )
         {
-            streamlog_out( DEBUG0 ) << "x ; y ; z : " << _hitsArray[j][i].measuredX << " ; "
+            streamlog_out( DEBUG3 ) << "x ; y ; z : " << _hitsArray[j][i].measuredX << " ; "
                                     << _hitsArray[j][i].measuredY << " ; " << _hitsArray[j][i].measuredZ << endl;
         }
     }
@@ -982,8 +904,8 @@ void EUTelMilleGBL::processEvent( LCEvent * event ) {
                 for( size_t jB = 0; jB < _hitsArray[iB].size(); jB++ ) {
                     double dx = _hitsArray[iB][jB].measuredX - _hitsArray[iA][jA].measuredX;
                     double dy = _hitsArray[iB][jB].measuredY - _hitsArray[iA][jA].measuredY;
-                    dx01Hist->fill( dx );
-                    dy01Hist->fill( dy );
+                    dx01Hist->Fill( dx );
+                    dy01Hist->Fill( dy );
                 }//loop hits jB
             }//iB valid
 
@@ -992,8 +914,8 @@ void EUTelMilleGBL::processEvent( LCEvent * event ) {
                 for( size_t jB = 0; jB < _hitsArray[iB].size(); jB++ ) {
                     double dx = _hitsArray[iB][jB].measuredX - _hitsArray[iA][jA].measuredX;
                     double dy = _hitsArray[iB][jB].measuredY - _hitsArray[iA][jA].measuredY;
-                    dx02Hist->fill( dx );
-                    dy02Hist->fill( dy );
+                    dx02Hist->Fill( dx );
+                    dy02Hist->Fill( dy );
                 }//loop hits jB
             }//iB valid
 
@@ -1002,8 +924,8 @@ void EUTelMilleGBL::processEvent( LCEvent * event ) {
                 for( size_t jB = 0; jB < _hitsArray[iB].size(); jB++ ) {
                     double dx = _hitsArray[iB][jB].measuredX - _hitsArray[iA][jA].measuredX;
                     double dy = _hitsArray[iB][jB].measuredY - _hitsArray[iA][jA].measuredY;
-                    dx03Hist->fill( dx );
-                    dy03Hist->fill( dy );
+                    dx03Hist->Fill( dx );
+                    dy03Hist->Fill( dy );
                 }//loop hits jB
             }//iB valid
 
@@ -1012,8 +934,8 @@ void EUTelMilleGBL::processEvent( LCEvent * event ) {
                 for( size_t jB = 0; jB < _hitsArray[iB].size(); jB++ ) {
                     double dx = _hitsArray[iB][jB].measuredX - _hitsArray[iA][jA].measuredX;
                     double dy = _hitsArray[iB][jB].measuredY - _hitsArray[iA][jA].measuredY;
-                    dx04Hist->fill( dx );
-                    dy04Hist->fill( dy );
+                    dx04Hist->Fill( dx );
+                    dy04Hist->Fill( dy );
                 }//loop hits jB
             }//iB valid
 
@@ -1022,8 +944,28 @@ void EUTelMilleGBL::processEvent( LCEvent * event ) {
                 for( size_t jB = 0; jB < _hitsArray[iB].size(); jB++ ) {
                     double dx = _hitsArray[iB][jB].measuredX - _hitsArray[iA][jA].measuredX;
                     double dy = _hitsArray[iB][jB].measuredY - _hitsArray[iA][jA].measuredY;
-                    dx05Hist->fill( dx );
-                    dy05Hist->fill( dy );
+                    dx05Hist->Fill( dx );
+                    dy05Hist->Fill( dy );
+                }//loop hits jB
+            }//iB valid
+
+            iB = indexconverter[6]; // REF
+            if( iB >= 0 ) { // not excluded
+                for( size_t jB = 0; jB < _hitsArray[iB].size(); jB++ ) {
+                    double dx = _hitsArray[iB][jB].measuredX - _hitsArray[iA][jA].measuredX;
+                    double dy = _hitsArray[iB][jB].measuredY - _hitsArray[iA][jA].measuredY;
+                    dx06Hist->Fill( dx );
+                    dy06Hist->Fill( dy );
+                }//loop hits jB
+            }//iB valid
+
+            iB = indexconverter[7]; // DUT
+            if( iB >= 0 ) { // not excluded
+                for( size_t jB = 0; jB < _hitsArray[iB].size(); jB++ ) {
+                    double dx = _hitsArray[iB][jB].measuredX - _hitsArray[iA][jA].measuredX;
+                    double dy = _hitsArray[iB][jB].measuredY - _hitsArray[iA][jA].measuredY;
+                    dx07Hist->Fill( dx );
+                    dy07Hist->Fill( dy );
                 }//loop hits jB
             }//iB valid
 
@@ -1056,15 +998,15 @@ void EUTelMilleGBL::processEvent( LCEvent * event ) {
     int Counter_trk_DUT_REF = 0;
 
 
-    streamlog_out (DEBUG0) << "Triplets matching plane indeces = " << i0 << " " << i1 << " " << i2 << " " << i3 << " " << i4 << " " << i5 <<endl;
-    streamlog_out (DEBUG0) << "DUT index = " << i6 << " ; REF index = " << i7 << endl;
+    streamlog_out (DEBUG1) << "Triplets matching plane Order indeces = " << i0 << " " << i1 << " " << i2 << " " << i3 << " " << i4 << " " << i5 <<endl;
+    streamlog_out (DEBUG1) << "DUT Order index = " << i6 << " ; REF Order index = " << i7 << endl;
 
     //check the align type
     int align;
 
     if(_aligntype == 0) {align = i0*i1*i2*i3*i4*i5;} //tel alignment
     if(_aligntype == 1) {align = i0*i1*i2*i3*i4*i5*i7;} //REF alignment
-    if(_aligntype == 2) {align = i0*i1*i2*i3*i4*i5*i6;} //DUT alignment
+    if(_aligntype == 2) {align = i0*i1*i2*i3*i4*i5*i6*i7;} //DUT alignment
 
     if( align >= 0 ) { // tel planes not excluded
 
@@ -1088,6 +1030,9 @@ void EUTelMilleGBL::processEvent( LCEvent * event ) {
                 double tx = dx02 / dz02; // angle theta x
                 double ty = dy02 / dz02; // angle theta y
 
+                triSlopeXHist->Fill(tx) ;
+                triSlopeYHist->Fill(ty) ;
+
                 double avx = 0.5 * ( _hitsArray[i0][j0].measuredX + _hitsArray[i2][j2].measuredX ); // average x why do we need to look at av numb here?
                 double avy = 0.5 * ( _hitsArray[i0][j0].measuredY + _hitsArray[i2][j2].measuredY ); // average y
                 double avz = 0.5 * ( _hitsArray[i0][j0].measuredZ + _hitsArray[i2][j2].measuredZ ); // average z
@@ -1104,12 +1049,12 @@ void EUTelMilleGBL::processEvent( LCEvent * event ) {
                     double dy = _hitsArray[i1][j1].measuredY - ys;
                     double dr = sqrt (_hitsArray[i1][j1].measuredX*_hitsArray[i1][j1].measuredX + _hitsArray[i1][j1].measuredY*_hitsArray[i1][j1].measuredY ) -
                             sqrt ( xs*xs + ys*ys );
-                    tridx_noCut_Hist->fill(dx);
-                    tridy_noCut_Hist->fill(dy);
-                    tridr_noCut_Hist->fill(dr);
+                    tridx_noCut_Hist->Fill(dx);
+                    tridy_noCut_Hist->Fill(dy);
+                    tridr_noCut_Hist->Fill(dr);
 
-                    if( abs(dy) < _triCut ) tridxHist->fill( dx );
-                    if( abs(dx) < _triCut ) tridyHist->fill( dy );
+                    if( abs(dy) < _triCut ) tridxHist->Fill( dx );
+                    if( abs(dx) < _triCut ) tridyHist->Fill( dy );
 
                     if( abs(dx) < _triCut  && abs(dy) < _triCut ) {
                         //form an estimated hit on the middle plane
@@ -1130,7 +1075,7 @@ void EUTelMilleGBL::processEvent( LCEvent * event ) {
             }//loop hits j2
         }//loop hits j0
 
-        ntriHist->fill( ntri );
+        ntriHist->Fill( ntri );
 
         if( ntri >= _maxTrackCandidates ) {
             streamlog_out( WARNING2 ) << "Maximum number of track candidates reached. Maybe further tracks were skipped" << endl;
@@ -1156,6 +1101,9 @@ void EUTelMilleGBL::processEvent( LCEvent * event ) {
                 double tx = dx35 / dz35; // angle theta x
                 double ty = dy35 / dz35; // angle theta x
 
+                driSlopeXHist->Fill(tx) ;
+                driSlopeYHist->Fill(ty) ;
+
                 double avx = 0.5 * ( _hitsArray[i3][j3].measuredX + _hitsArray[i5][j5].measuredX ); // average
                 double avy = 0.5 * ( _hitsArray[i3][j3].measuredY + _hitsArray[i5][j5].measuredY ); // average
                 double avz = 0.5 * ( _hitsArray[i3][j3].measuredZ + _hitsArray[i5][j5].measuredZ ); // average
@@ -1175,12 +1123,12 @@ void EUTelMilleGBL::processEvent( LCEvent * event ) {
                     double dr = sqrt (_hitsArray[i4][j4].measuredX*_hitsArray[i4][j4].measuredX + _hitsArray[i4][j4].measuredY*_hitsArray[i4][j4].measuredY ) -
                             sqrt ( xs*xs + ys*ys );
 
-                    dridx_noCut_Hist->fill(dx);
-                    dridy_noCut_Hist->fill(dy);
-                    dridr_noCut_Hist->fill(dr);
+                    dridx_noCut_Hist->Fill(dx);
+                    dridy_noCut_Hist->Fill(dy);
+                    dridr_noCut_Hist->Fill(dr);
 
-                    if( abs(dx) < _driCut ) dridxHist->fill( dy );
-                    if( abs(dy) < _driCut ) dridyHist->fill( dx );
+                    if( abs(dx) < _driCut ) dridxHist->Fill( dy );
+                    if( abs(dy) < _driCut ) dridyHist->Fill( dx );
 
                     if( abs(dx) < _driCut  && abs(dy) < _driCut ) {
 
@@ -1202,7 +1150,7 @@ void EUTelMilleGBL::processEvent( LCEvent * event ) {
             }//loop hits j5
         }//loop hits j3
 
-        ndriHist->fill( ndri );
+        ndriHist->Fill( ndri );
 
         if( ndri >= _maxTrackCandidates ) {
             streamlog_out( WARNING2 ) << "Maximum number of track candidates reached. Maybe further tracks were skipped" << endl;
@@ -1241,8 +1189,6 @@ void EUTelMilleGBL::processEvent( LCEvent * event ) {
         //residual arrays for each plane, each track
         double rx[8][_maxTrackCandidates];
         double ry[8][_maxTrackCandidates];
-        //hits on how many planes do we have for further analysis
-        int nPl = 6;
 
         for( int kA = 0; (kA < ntri) && (kA < _maxTrackCandidates); ++kA ) { // i = A
 
@@ -1266,12 +1212,12 @@ void EUTelMilleGBL::processEvent( LCEvent * event ) {
                 double rB = sqrt(xB*xB + yB*yB);
                 double dr = rB - rA; //distance difference
 
-                sixdx_noCut_Hist->fill(dx);
-                sixdy_noCut_Hist->fill(dy);
-                sixdr_noCut_Hist->fill(dr);
+                sixdx_noCut_Hist->Fill(dx);
+                sixdy_noCut_Hist->Fill(dy);
+                sixdr_noCut_Hist->Fill(dr);
 
-                if( abs(dy) < _sixCut ) sixdxHist->fill( dx );
-                if( abs(dx) < _sixCut ) sixdyHist->fill( dy );
+                if( abs(dy) < _sixCut ) sixdxHist->Fill( dx );
+                if( abs(dx) < _sixCut ) sixdyHist->Fill( dy );
 
                 if( abs(dx) < _sixCut  && abs(dy) < _sixCut ) { // triplet-driplet match
 
@@ -1282,8 +1228,8 @@ void EUTelMilleGBL::processEvent( LCEvent * event ) {
                     double kx = sxB[kB] - sxA[kA]; //kink x
                     double ky = syB[kB] - syA[kA]; //kink y
 
-                    sixkxHist->fill( kx*1E3 );
-                    sixkyHist->fill( ky*1E3 );
+                    sixkxHist->Fill( kx*1E3 );
+                    sixkyHist->Fill( ky*1E3 );
                     selxHist->fill( xA*1E-3 ); // triplet at mid
                     selyHist->fill( yA*1E-3 );
                     selaxHist->fill( sxA[kA]*1E3 );//track slope
@@ -1292,9 +1238,10 @@ void EUTelMilleGBL::processEvent( LCEvent * event ) {
                     //residuals calculation
                     // extrapolate triplet to each plane:
                     //temp res for tel planes
-                    double res_x[8];
-                    double res_y[8];
-
+                    double res_x[6];
+                    double res_y[6];
+                    //loop over tel planes
+                    nPl = 6;
                     for( int ipl = 0; ipl < nPl; ipl ++)
                     {
                         int whichhit;
@@ -1355,7 +1302,7 @@ void EUTelMilleGBL::processEvent( LCEvent * event ) {
                     }
 
                     //match the REF hits to the track
-                    if(_aligntype == 1)
+                    else if(_aligntype == 1)
                     {
                         for(int iREF = 0; iREF < _hitsArray[i7].size(); iREF++)
                         {
@@ -1377,42 +1324,121 @@ void EUTelMilleGBL::processEvent( LCEvent * event ) {
 
                             if( (dxREF < _drirefCut) && (dyREF < _drirefCut) )
                             {
-                                //indeces showing which hit on which plane belongs to the track
-                                trk[0][ntrk_REF_Event] = hts[i0][kA];
-                                trk[1][ntrk_REF_Event] = hts[i1][kA];
-                                trk[2][ntrk_REF_Event] = hts[i2][kA];
-                                trk[3][ntrk_REF_Event] = hts[i3][kB];
-                                trk[4][ntrk_REF_Event] = hts[i4][kB];
-                                trk[5][ntrk_REF_Event] = hts[i5][kB];
-                                trk[6][ntrk_REF_Event] = iREF;
-                                //writing the arrays of
-                                xmA_trk[ntrk_REF_Event] = xmA[kA];
-                                ymA_trk[ntrk_REF_Event] = ymA[kA];
-                                zmA_trk[ntrk_REF_Event] = zmA[kA];
-                                sxA_trk[ntrk_REF_Event] = sxA[kA];
-                                syA_trk[ntrk_REF_Event] = syA[kA];
-                                xmB_trk[ntrk_REF_Event] = xmB[kB];
-                                ymB_trk[ntrk_REF_Event] = ymB[kB];
-                                zmB_trk[ntrk_REF_Event] = zmB[kB];
-                                sxB_trk[ntrk_REF_Event] = sxB[kB];
-                                syB_trk[ntrk_REF_Event] = syB[kB];
-                                dx_trk[ntrk_REF_Event] = dx;
-                                dy_trk[ntrk_REF_Event] = dy;
-                                xA_trk[ntrk_REF_Event] = xA;
-                                yA_trk[ntrk_REF_Event] = yA;
-                                xB_trk[ntrk_REF_Event] = xB;
-                                yB_trk[ntrk_REF_Event] = yB;
-
-                                nPl = 7;
-
-                                for( int ipl = 0; ipl < nPl; ipl ++)
+                                //match DUT to the tracks
+                                if(_aligntype == 2)
                                 {
-                                    if(ipl == 6) {
-                                        rx[ipl][ntrk_REF_Event] = dxREF;
-                                        ry[ipl][ntrk_REF_Event] = dyREF;}
-                                    else if(ipl < 6){
-                                        rx[ipl][ntrk_REF_Event] = res_x[ipl];
-                                        ry[ipl][ntrk_REF_Event] = res_y[ipl];
+                                    for(int iDUT = 0; iDUT < _hitsArray[i6].size(); iDUT++)
+                                    {
+                                        double dz = _hitsArray[i6][iDUT].measuredZ - zmA[kA];
+                                        double xT = xmA[kA] + sxA[kA] * dz; // estimation of triplet to the DUT plane
+                                        double yT = ymA[kA] + syA[kA] * dz;
+                                        double xD = xmB[kB] + sxB[kB] * dz; // estimation of driplet to the DUT plane
+                                        double yD = ymB[kB] + syB[kB] * dz;
+
+                                        // double dxDUT = _hitsArray[i6][iDUT].measuredX - xDrip ;
+                                        double dyDUT_t = _hitsArray[i6][iDUT].measuredY - yT ;
+                                        double dxDUT_t = _hitsArray[i6][iDUT].measuredY - xT ;
+                                        double dyDUT_d = _hitsArray[i6][iDUT].measuredY - yD ;
+                                        double dxDUT_d = _hitsArray[i6][iDUT].measuredY - xD ;
+                                        //double drREF = sqrt(_hitsArray[i7][iREF].measuredX*_hitsArray[i7][iREF].measuredX + _hitsArray[i7][iREF].measuredY*_hitsArray[i7][iREF].measuredY) -
+                                        //      sqrt(xDrip*xDrip + yDrip*yDrip);
+
+                                        hTrk_DUT_dy_triplet_noCut->fill(dyDUT_t);
+                                        hTrk_DUT_dy_driplet_noCut->fill(dyDUT_d);
+
+                                        if ( (abs(dyDUT_t) < _tridutCut) && (abs(dyDUT_d) < _dridutCut) )
+                                        {
+                                            //indeces showing which hit on which plane belongs to the track
+                                            trk[0][ntrk_DUT_Event] = hts[i0][kA];
+                                            trk[1][ntrk_DUT_Event] = hts[i1][kA];
+                                            trk[2][ntrk_DUT_Event] = hts[i2][kA];
+                                            trk[3][ntrk_DUT_Event] = iDUT;
+                                            trk[4][ntrk_DUT_Event] = hts[i3][kB];
+                                            trk[5][ntrk_DUT_Event] = hts[i4][kB];
+                                            trk[6][ntrk_DUT_Event] = hts[i5][kB];
+                                            trk[7][ntrk_DUT_Event] = iREF;
+                                            //assigning the triplet, driplet info the a track
+                                            xmA_trk[ntrk_DUT_Event] = xmA[kA];
+                                            ymA_trk[ntrk_DUT_Event] = ymA[kA];
+                                            zmA_trk[ntrk_DUT_Event] = zmA[kA];
+                                            sxA_trk[ntrk_DUT_Event] = sxA[kA];
+                                            syA_trk[ntrk_DUT_Event] = syA[kA];
+                                            xmB_trk[ntrk_DUT_Event] = xmB[kB];
+                                            ymB_trk[ntrk_DUT_Event] = ymB[kB];
+                                            zmB_trk[ntrk_DUT_Event] = zmB[kB];
+                                            sxB_trk[ntrk_DUT_Event] = sxB[kB];
+                                            syB_trk[ntrk_DUT_Event] = syB[kB];
+                                            dx_trk[ntrk_DUT_Event] = dx;
+                                            dy_trk[ntrk_DUT_Event] = dy;
+                                            xA_trk[ntrk_DUT_Event] = xA;
+                                            yA_trk[ntrk_DUT_Event] = yA;
+                                            xB_trk[ntrk_DUT_Event] = xB;
+                                            yB_trk[ntrk_DUT_Event] = yB;
+
+                                            nPl = 8;
+
+                                            for( int ipl = 0; ipl < nPl; ipl ++)
+                                            {
+                                                if(ipl < 3) {
+                                                    rx[ipl][ntrk_DUT_Event] = res_x[ipl];
+                                                    ry[ipl][ntrk_DUT_Event] = res_y[ipl];
+                                                }
+                                                else if ( ipl == 3 )
+                                                {
+                                                    if(_sensetiveAxis == "y")
+                                                    {ry[ipl][ntrk_DUT_Event] = dyDUT_t;}
+                                                    if(_sensetiveAxis == "x")
+                                                    {rx[ipl][ntrk_DUT_Event] = dxDUT_t;}
+                                                }
+                                                else if( (ipl > 3) && (ipl < nPl - 1) ) {
+                                                    rx[ipl][ntrk_DUT_Event] = res_x[ipl-1];
+                                                    ry[ipl][ntrk_DUT_Event] = res_x[ipl-1];}
+                                                else if(ipl == nPl-1) {
+                                                    rx[ipl][ntrk_DUT_Event] = dxREF;
+                                                    ry[ipl][ntrk_DUT_Event] = dyREF;}
+                                            }
+                                            ntrk_DUT_Event++;
+                                        }
+                                    }
+                                }
+                                else if (_aligntype == 1){
+                                    //indeces showing which hit on which plane belongs to the track
+                                    trk[0][ntrk_REF_Event] = hts[i0][kA];
+                                    trk[1][ntrk_REF_Event] = hts[i1][kA];
+                                    trk[2][ntrk_REF_Event] = hts[i2][kA];
+                                    trk[3][ntrk_REF_Event] = hts[i3][kB];
+                                    trk[4][ntrk_REF_Event] = hts[i4][kB];
+                                    trk[5][ntrk_REF_Event] = hts[i5][kB];
+                                    trk[6][ntrk_REF_Event] = iREF;
+                                    //writing the arrays of
+                                    xmA_trk[ntrk_REF_Event] = xmA[kA];
+                                    ymA_trk[ntrk_REF_Event] = ymA[kA];
+                                    zmA_trk[ntrk_REF_Event] = zmA[kA];
+                                    sxA_trk[ntrk_REF_Event] = sxA[kA];
+                                    syA_trk[ntrk_REF_Event] = syA[kA];
+                                    xmB_trk[ntrk_REF_Event] = xmB[kB];
+                                    ymB_trk[ntrk_REF_Event] = ymB[kB];
+                                    zmB_trk[ntrk_REF_Event] = zmB[kB];
+                                    sxB_trk[ntrk_REF_Event] = sxB[kB];
+                                    syB_trk[ntrk_REF_Event] = syB[kB];
+                                    dx_trk[ntrk_REF_Event] = dx;
+                                    dy_trk[ntrk_REF_Event] = dy;
+                                    xA_trk[ntrk_REF_Event] = xA;
+                                    yA_trk[ntrk_REF_Event] = yA;
+                                    xB_trk[ntrk_REF_Event] = xB;
+                                    yB_trk[ntrk_REF_Event] = yB;
+
+                                    nPl = 7;
+
+                                    for( int ipl = 0; ipl < nPl; ipl ++)
+                                    {
+                                        if(ipl == 6) {
+                                            rx[ipl][ntrk_REF_Event] = dxREF;
+                                            ry[ipl][ntrk_REF_Event] = dyREF;}
+                                        else if(ipl < 6){
+                                            rx[ipl][ntrk_REF_Event] = res_x[ipl];
+                                            ry[ipl][ntrk_REF_Event] = res_y[ipl];
+                                        }
                                     }
                                 }
 
@@ -1434,45 +1460,48 @@ void EUTelMilleGBL::processEvent( LCEvent * event ) {
 
         _nMilleTracksTotal += _nMilleTracksperEvent;
         ntrk_REF_Total += ntrk_REF_Event;
+        ntrk_DUT_Total += ntrk_DUT_Event;
 
         streamlog_out( DEBUG1 ) << "Triplets matched (tracks) found: " << " event = " << _iEvt << " : " <<  _nMilleTracksperEvent << endl;
-        streamlog_out( DEBUG1 ) << "Tracks including REF found: " << " event = " << _iEvt << " : " <<  ntrk_REF_Event << endl;
+        if(_aligntype == 1) streamlog_out( DEBUG1 ) << "Tracks including REF found: " << " event = " << _iEvt << " : " <<  ntrk_REF_Event << endl;
+        if(_aligntype == 2) streamlog_out( DEBUG1 ) << "Tracks including DUT found: " << " event = " << _iEvt << " : " <<  ntrk_DUT_Event << endl;
 
-        nmHist->fill( _nMilleTracksperEvent );
+        nmHist->Fill( _nMilleTracksperEvent );
         hTrk_REF->fill(ntrk_REF_Event);
+        hTrk_DUT->fill(ntrk_DUT_Event);
 
-        hTripletsMatched_DUT->fill(Counter_trk_DUT);
-        hTripletsMatched_DUT_2D->fill(_iEvt, Counter_trk_DUT);
-        hTripletsMatched_REF->fill(Counter_trk_REF);
-        hTripletsMatched_REF_2D->fill(_iEvt, Counter_trk_DUT);
-        hTripletsMatched_DUT_REF->fill(Counter_trk_DUT_REF);
-        hTripletsMatched_DUT_REF_2D->fill(_iEvt, Counter_trk_DUT);
+        hTripletsMatched_DUT->Fill(Counter_trk_DUT);
+        hTripletsMatched_DUT_2D->Fill(_iEvt, Counter_trk_DUT);
+        hTripletsMatched_REF->Fill(Counter_trk_REF);
+        hTripletsMatched_REF_2D->Fill(_iEvt, Counter_trk_DUT);
+        hTripletsMatched_DUT_REF->Fill(Counter_trk_DUT_REF);
+        hTripletsMatched_DUT_REF_2D->Fill(_iEvt, Counter_trk_DUT);
 
         int tracks;
-        if (_aligntype == 0) {tracks = _nMilleTracksperEvent;}
-        if (_aligntype == 1) {tracks = ntrk_REF_Event;}
+        if (_aligntype == 0) {tracks = _nMilleTracksperEvent; nPl = 6;}
+        if (_aligntype == 1) {tracks = ntrk_REF_Event; nPl = 7;}
+        if (_aligntype == 2) {tracks = ntrk_DUT_Event; nPl = 8;}
 
 
         //forming GBL trajectories from the found above tracks
 
         for(int iTrk = 0; iTrk < tracks; iTrk++) { // form GBL traj from tracks
+
             // GBL point vector for the trajectory
             std::vector<gbl::GblPoint> traj_points;
-
             // build up trajectory:
             std::vector<unsigned int> ilab; // 0-5 = telescope, 6 = DUT, 7 = REF
             vector<double> sPoint;
-
             double s = 0;
 
             TMatrixD jacPointToPoint( 5, 5 );
 
             TMatrixD proL2m(2,2);
             proL2m.UnitMatrix();
-
+            // measurement on a plane:
             TVectorD meas(2);
 
-            // scatter:
+            // scatter on a plane/ between planes:
             TVectorD scat(2);
             scat.Zero(); //mean is zero
 
@@ -1480,6 +1509,7 @@ void EUTelMilleGBL::processEvent( LCEvent * event ) {
             double X0Si = 65e-3 / 94; // Si + Kapton
             double tetSi = 0.0136 * sqrt(X0Si) / p * ( 1 + 0.038*std::log(X0Si) );
 
+            //Si scattering
             TVectorD wscatSi(2);
             wscatSi[0] = 1.0 / ( tetSi * tetSi ); //weight
             wscatSi[1] = 1.0 / ( tetSi * tetSi );
@@ -1506,14 +1536,17 @@ void EUTelMilleGBL::processEvent( LCEvent * event ) {
 
             // telescope planes 0-5:
 
-            double zprev = _hitsArray[0][iTrk].measuredZ; // id0 tel. plane, including any pre-alignment
+            double zprev = _hitsArray[i0][iTrk].measuredZ; // id0 tel. plane, including any pre-alignment
 
             //precision for adding a track to trajectory
             TVectorD measPrec(2); // precision = 1/resolution^2
             //plane resolutions
             double resx;
             double resy;
+            int point_counter = 0;
 
+            streamlog_out (DEBUG1) << "GBL trajectories filling!"<< endl;
+            streamlog_out (DEBUG1) << "How many planes do we take to account: " << nPl << endl;
             for( int ipl = 0; ipl < nPl; ipl++ ) {
                 //tel alignment
                 if(_aligntype == 0){
@@ -1522,7 +1555,7 @@ void EUTelMilleGBL::processEvent( LCEvent * event ) {
                     resy = _telescopeResolution; // [um] telescope initial resolution
                 }
                 //REF alignment
-                if(_aligntype == 1){
+                else if(_aligntype == 1){
 
                     if(ipl < 6){
                         resx = _telescopeResolution; // [um] telescope initial resolution
@@ -1532,8 +1565,35 @@ void EUTelMilleGBL::processEvent( LCEvent * event ) {
                         resx = _REFResolution; // [um] telescope initial resolution
                         resy = _REFResolution; // [um] telescope initial resolution
                     }
-
                 }
+                //REF alignment
+                else if(_aligntype == 2){
+
+                    if( ((ipl < 3) || (ipl > 3)) && (ipl < nPl-1) ) {
+                        resx = _telescopeResolution; // [um] telescope initial resolution
+                        resy = _telescopeResolution; // [um] telescope initial resolution
+                    }
+                    else if (ipl == 3) {
+
+                        if(_sensetiveAxis == "y")
+                        {
+                            resy = _DUTResolution;
+                            resx = _telescopeResolution;
+                        }
+                        if(_sensetiveAxis == "x")
+                        {
+                            resy = _telescopeResolution;
+                            resx = _DUTResolution;
+                        }
+                    }
+
+                    else if(ipl == nPl - 1){
+                        resx = _REFResolution; // [um] telescope initial resolution
+                        resy = _REFResolution; // [um] telescope initial resolution
+                    }
+                }
+
+                streamlog_out (DEBUG1) << "Resolutions : " << endl << " i = " << ipl << ", Order index = " << indexconverter[ipl] << ". Resx / Resy = " << resx << " / " <<resy << endl;
 
                 measPrec[0] = 1.0 / resx / resx;
                 measPrec[1] = 1.0 / resy / resy;
@@ -1551,15 +1611,24 @@ void EUTelMilleGBL::processEvent( LCEvent * event ) {
                 meas[0] =  rx[ipl][iTrk];
                 meas[1] =  ry[ipl][iTrk];
 
-                streamlog_out (DEBUG0) << "GBL points formation :"<< endl
-                                          << "plane = " << ipl << " | geomID = " << _siPlanesLayerLayout->getID(ipl) << " : X/Y/Z = "
-                                             << _hitsArray[ipl][iTrk].measuredX <<"/" << _hitsArray[ipl][iTrk].measuredY <<"/" <<
-                                                _hitsArray[ipl][iTrk].measuredZ << endl
-                                                << "meas[0] = " << meas[0] << " ;  meas[1] = " << meas[1] << " | step = " << step << " s = " << s << endl;
+                streamlog_out (DEBUG1) << "plane = " << ipl << " | geomID = " << _siPlanesLayerLayout->getID(ipl) << " : X/Y/Z = "
+                                       << _hitsArray[ipl][iTrk].measuredX <<"/" << _hitsArray[ipl][iTrk].measuredY <<"/" <<
+                                          _hitsArray[ipl][iTrk].measuredZ << endl
+                                       << "meas[0] = " << meas[0] << " ;  meas[1] = " << meas[1] << " | step = " << step << " s = " << s << endl;
 
                 point->addMeasurement( proL2m, meas, measPrec );
 
-                point->addScatterer( scat, wscatSi );
+                if(_aligntype < 2) { point->addScatterer( scat, wscatSi ); }
+
+                if((_aligntype == 2) && (ipl == 3) ) {
+
+                    double tetDUT = 0.0136 * sqrt(DUTX0) / p * ( 1 + 0.038*std::log(DUTX0) );
+                    TVectorD wscatDUT(2);
+                    wscatDUT[0] = 1.0 / ( tetDUT * tetDUT ); //weight
+                    wscatDUT[1] = 1.0 / ( tetDUT * tetDUT );
+                    point->addScatterer( scat, wscatDUT );
+                }
+
 
                 if( _alignMode == 2 ) { // only x and y shifts
                     // global labels for MP:
@@ -1575,7 +1644,7 @@ void EUTelMilleGBL::processEvent( LCEvent * event ) {
                     globalLabels[2] = 3 + 3*ipl; // rot
                     //alDer3[0][2] = -_hitsArray[ipl][jhit].measuredY; // dx/dphi
                     //alDer3[1][2] =  _hitsArray[ipl][jhit].measuredX; // dy/dphi
-                    double dz = _hitsArray[ipl][trk[ipl][iTrk]].measuredZ - zmA_trk[iTrk];
+                    double dz = _hitsArray[ipl][iTrk].measuredZ - zmA_trk[iTrk];
                     double xs = xmA_trk[iTrk] + sxA_trk[iTrk] * dz; // Ax at plane
                     double ys = ymA_trk[iTrk] + syA_trk[iTrk] * dz; // Ay at plane
                     alDer3[0][2] = -ys; // dx/dphi
@@ -1590,7 +1659,7 @@ void EUTelMilleGBL::processEvent( LCEvent * event ) {
                     globalLabels[3] = 4 + 4*ipl; // z
                     //alDer4[0][2] = -_hitsArray[ipl][jhit].measuredY; // dx/dphi
                     //alDer4[1][2] =  _hitsArray[ipl][jhit].measuredX; // dy/dphi
-                    double dz = _hitsArray[ipl][trk[ipl][iTrk]].measuredZ - zmA_trk[iTrk];
+                    double dz = _hitsArray[ipl][iTrk].measuredZ - zmA_trk[iTrk];
                     double xs = xmA_trk[iTrk] + sxA_trk[iTrk] * dz; // Ax at plane
                     double ys = ymA_trk[iTrk] + syA_trk[iTrk] * dz; // Ay at plane
                     alDer4[0][2] = -ys; // dx/dphi
@@ -1598,18 +1667,18 @@ void EUTelMilleGBL::processEvent( LCEvent * event ) {
                     point->addGlobals( globalLabels, alDer4 ); // for MillePede alignment
                 }
 
-                //unsigned int iLabel = traj.addPoint(*point);
                 traj_points.push_back(*point);
-
-                //ilab[ipl] = iLabel;
+                // unsigned int iLabel = traj.addPoint(*point);
+                // ilab[ipl] = iLabel;
                 sPoint.push_back( s );
-
+                ilab.push_back(point_counter);
+                point_counter++;
                 delete point;
 
-                if( (DUT_scatterer == 1) && (ipl == 2) ) { // insert DUT
-
+                if( (DUT_scatterer == 1) && (_aligntype < 2) && (ipl == 2))
+                { // insert DUT
                     zz =  _siPlaneZPosition[i6]*1000; //DUT pos in um
-                    step = zz - _hitsArray[i2][0].measuredZ;
+                    step = zz - _hitsArray[i2][iTrk].measuredZ; //z pos of the tel pl. 2
 
 
                     jacPointToPoint = Jac55( step );
@@ -1619,7 +1688,7 @@ void EUTelMilleGBL::processEvent( LCEvent * event ) {
                     zprev = zz;
 
                     streamlog_out (DEBUG0) << "Add DUT as scatterer :"<< endl
-                                             << " | geomID = " << _siPlanesLayerLayout->getID(i6) << " : zz = " << zz << " step = " <<step << " s = " << s << endl;
+                                           << "GeomID = " << _siPlanesLayerLayout->getID(i6) << " : zz = " << zz << " step = " <<step << " s = " << s << endl;
 
                     double tetDUT = 0.0136 * sqrt(DUTX0) / p * ( 1 + 0.038*std::log(DUTX0) );
 
@@ -1628,14 +1697,10 @@ void EUTelMilleGBL::processEvent( LCEvent * event ) {
                     wscatDUT[1] = 1.0 / ( tetDUT * tetDUT );
 
                     point->addScatterer( scat, wscatDUT );
-
                     //iLabel = traj.addPoint(*point);
                     traj_points.push_back(*point);
-
-                    // ilab[6] = iLabel;
-
+                    point_counter++;
                     delete point;
-
                 }//DUT present
 
             } // loop over planes
@@ -1647,28 +1712,25 @@ void EUTelMilleGBL::processEvent( LCEvent * event ) {
 
             gbl::GblTrajectory traj(traj_points, false); // curvature = false
             traj.fit( Chi2, Ndf, lostWeight );
-            traj.getLabels(ilab);
+            streamlog_out (DEBUG1) << " chi2 " << Chi2 << ", ndf " << Ndf << endl;
+            std::vector<unsigned int> ilab1;
+            traj.getLabels(ilab1);
 
             // debug:
-            //                        streamlog_out (DEBUG0) << "check 3: the traj points:" << endl;
-            //                        for(int i =0; i < 7; i++)
-            //                        {
-            //                            streamlog_out (DEBUG0) << ilab[i] << endl;
-            //                        }
+            streamlog_out (DEBUG0) << "GBL trajectory is filled with " << traj.getNumPoints() << " points:" << endl;
+            streamlog_out (DEBUG0) << "Is traj valid? " << traj.isValid() << endl;
+//            streamlog_out (DEBUG0) << "Traj points:" << endl;
+//            streamlog_out (DEBUG0) << traj.printPoints();
+//            streamlog_out (DEBUG0) << "Trajectory :" << traj.printTrajectory();
+//            streamlog_out (DEBUG0) << "Traj data:" << traj.printData();
 
-            /*
-                                                 *
-                                       cout << "traj with " << traj.getNumPoints() << " points:" << endl;
-                                       for( int ipl = 0; ipl < 6; ++ipl ){
-                                         cout << "  plane " << ipl << ", lab " << ilab[ipl];
-                                         cout << "  z " << sPoint[ipl]*1E-3;
-                                         cout << " dx " << rx[ipl];
-                                         cout << " dy " << ry[ipl];
-                                         cout << endl;
-                                       }
-                                       */
-
-            //cout << " chi2 " << Chi2 << ", ndf " << Ndf << endl;
+//            streamlog_out (DEBUG0) << "GBL measurement points :" <<endl;
+//                        for( int ipl = 0; ipl < traj_points.size(); ++ipl ){
+//                            streamlog_out (DEBUG0) << "  i = " << ipl << ", gbl point " << ilab[ipl] << "  z_gbl [mm] =  " << sPoint[ilab[ipl]]*1E-3 <<
+//                                                      " dx [um] = " << rx[ipl][iTrk] << " dy [um] = " << ry[ipl][iTrk] << endl;
+//                        }
+//                        for (int i =0 ; i < ilab1.size(); i++) {
+//                            streamlog_out (DEBUG0) << "ilab1[" <<i << "] = " << ilab1[i] << endl;}
 
             gblndfHist->fill( Ndf );
             gblchi2Hist->fill( Chi2 );
@@ -1678,6 +1740,8 @@ void EUTelMilleGBL::processEvent( LCEvent * event ) {
             // bad fits:
 
             if( probchi < _chi2tondfcut ) {
+
+                streamlog_out (DEBUG1) << " bad fit check " << probchi << endl;
 
                 badxHist->fill( xA_trk[iTrk]*1E-3 ); // triplet at DUT
                 badyHist->fill( yA_trk[iTrk]*1E-3 );
@@ -1700,6 +1764,7 @@ void EUTelMilleGBL::processEvent( LCEvent * event ) {
             }// bad fit
 
             else {
+                streamlog_out (DEBUG1) << " good fit check " << probchi << endl;
 
                 goodx1Hist->fill( rx[i1][iTrk] ); // triplet interpol
                 goody1Hist->fill( ry[i1][iTrk] );
@@ -1713,99 +1778,95 @@ void EUTelMilleGBL::processEvent( LCEvent * event ) {
 
             double ax[8];
             double ay[8];
-            unsigned int k = 0;
-
-            // at plane 0:
-
-            int ipos = ilab[0];
-            traj.getResults( ipos, aCorrection, aCovariance );
 
             //track = q/p, x', y', x, y
             //        0,   1,  2,  3, 4
 
+
+
+            // at plane 0:
+            int ipos = ilab[0];
+            traj.getResults( ipos, aCorrection, aCovariance );
             gblax0Hist->fill( aCorrection[1]*1E3 ); // angle x [mrad]
             gbldx0Hist->fill( aCorrection[3] ); // shift x [um]
             gblrx0Hist->fill( rx[i0][iTrk] - aCorrection[3] ); // residual x [um]
-            ax[k] = aCorrection[1]; // angle correction at plane, for kinks
-            ay[k] = aCorrection[2]; // angle correction at plane, for kinks
-            k++;
-
+            ax[0] = aCorrection[1]; // angle correction at plane, for kinks
+            ay[0] = aCorrection[2]; // angle correction at plane, for kinks
+            //pl1
             ipos = ilab[1];
             traj.getResults( ipos, aCorrection, aCovariance );
             gblax1Hist->fill( aCorrection[1]*1E3 ); // angle x [mrad]
             gbldx1Hist->fill( aCorrection[3] ); // shift x [um]
             gblrx1Hist->fill( rx[i1][iTrk] - aCorrection[3] ); // residual x [um]
-            ax[k] = aCorrection[1]; // angle correction at plane, for kinks
-            ay[k] = aCorrection[2]; // angle correction at plane, for kinks
-            k++;
-
+            ax[1] = aCorrection[1]; // angle correction at plane, for kinks
+            ay[1] = aCorrection[2]; // angle correction at plane, for kinks
+            //pl2
             ipos = ilab[2];
             traj.getResults( ipos, aCorrection, aCovariance );
             gblax2Hist->fill( aCorrection[1]*1E3 ); // angle x [mrad]
             gbldx2Hist->fill( aCorrection[3] ); // shift x [um]
             gblrx2Hist->fill( rx[i2][iTrk] - aCorrection[3] ); // residual x [um]
-            ax[k] = aCorrection[1]; // angle correction at plane, for kinks
-            ay[k] = aCorrection[2]; // angle correction at plane, for kinks
-            k++;
-
-            //                        if( DUT_scatterer == 1) {
-            //                            ipos = ilab[6]; // 6 = DUT
-            //                            traj.getResults( ipos, aCorrection, aCovariance );
-            //                            gblax6Hist->fill( aCorrection[1]*1E3 ); // angle x [mrad]
-            //                            gbldx6Hist->fill( aCorrection[3] ); // shift x [um]
-            //                            gbldy6Hist->fill( aCorrection[4] ); // shift x [um]
-            //                            ax[k] = aCorrection[1]; // angle correction at plane, for kinks
-            //                            ay[k] = aCorrection[2]; // angle correction at plane, for kinks
-            //                            k++;
-            //                        }
-
+            ax[2] = aCorrection[1]; // angle correction at plane, for kinks
+            ay[2] = aCorrection[2]; // angle correction at plane, for kinks
+            //pl3
             ipos = ilab[3];
             traj.getResults( ipos, aCorrection, aCovariance );
             gblax3Hist->fill( aCorrection[1]*1E3 ); // angle x [mrad]
             gbldx3Hist->fill( aCorrection[3] ); // shift x [um]
             gblrx3Hist->fill( rx[i3][iTrk] - aCorrection[3] ); // residual x [um]
-            ax[k] = aCorrection[1]; // angle correction at plane, for kinks
-            ay[k] = aCorrection[2]; // angle correction at plane, for kinks
-            k++;
-
+            ax[3] = aCorrection[1]; // angle correction at plane, for kinks
+            ay[3] = aCorrection[2]; // angle correction at plane, for kinks
+            //pl4
             ipos = ilab[4];
             traj.getResults( ipos, aCorrection, aCovariance );
             gblax4Hist->fill( aCorrection[1]*1E3 ); // angle x [mrad]
             gbldx4Hist->fill( aCorrection[3] ); // shift x [um]
             gblrx4Hist->fill( rx[i4][iTrk] - aCorrection[3] ); // residual x [um]
-            ax[k] = aCorrection[1]; // angle correction at plane, for kinks
-            ay[k] = aCorrection[2]; // angle correction at plane, for kinks
-            k++;
-
+            ax[4] = aCorrection[1]; // angle correction at plane, for kinks
+            ay[4] = aCorrection[2]; // angle correction at plane, for kinks
+            //pl5
             ipos = ilab[5];
             traj.getResults( ipos, aCorrection, aCovariance );
             gblax5Hist->fill( aCorrection[1]*1E3 ); // angle x [mrad]
             gbldx5Hist->fill( aCorrection[3] ); // shift x [um]
             gblrx5Hist->fill( rx[i5][iTrk] - aCorrection[3] ); // residual x [um]
-            ax[k] = aCorrection[1]; // angle correction at plane, for kinks
-            ay[k] = aCorrection[2]; // angle correction at plane, for kinks
-            k++;
+            ax[5] = aCorrection[1]; // angle correction at plane, for kinks
+            ay[5] = aCorrection[2]; // angle correction at plane, for kinks
 
-            // kinks: 1,2 = tele, 3,4 = tele,
+            streamlog_out (DEBUG0) << " check kinks : " << endl;
+            for (int count = 0; count < 6; count++){
+             streamlog_out (DEBUG0) << count << " ax = " << ax[count] << " , ay = " << ay[count] << endl;
+            }
 
+            //DUT, i6
+            if( (_alignMode == 2) && (DUT_scatterer == 1) ) {
+                ipos = ilab[3];
+                traj.getResults( ipos, aCorrection, aCovariance );
+                gblax6Hist->fill( aCorrection[1]*1E3 ); // angle x [mrad]
+                gbldx6Hist->fill( aCorrection[3] ); // shift x [um]
+                gbldy6Hist->fill( aCorrection[4] ); // shift x [um]
+                ax[3] = aCorrection[1]; // angle correction at plane, for kinks
+                ay[3] = aCorrection[2]; // angle correction at plane, for kinks
+            }
+
+            //kinks
             gblkx1Hist->fill( (ax[1] - ax[0])*1E3 ); // kink at 1 [mrad]
             gblkx2Hist->fill( (ax[2] - ax[1])*1E3 ); // kink at 2 [mrad]
             gblkx3Hist->fill( (ax[3] - ax[2])*1E3 ); // kink at 3 [mrad]
             gblkx4Hist->fill( (ax[4] - ax[3])*1E3 ); // kink at 4 [mrad]
             gblkx5Hist->fill( (ax[5] - ax[4])*1E3 ); // kink at 5 [mrad]
-            //                        if( DUT_scatterer == 1 ) gblkx6Hist->fill( (ax[6] - ax[5])*1E3 ); // kink at 6 [mrad]
+//            if( DUT_scatterer == 1 ) gblkx6Hist->fill( (ax[i6] - ax[i5])*1E3 ); // kink at 6 [mrad]
 
-            traj.milleOut( *milleGBL );
+            if (_milleInit == 1) { traj.milleOut( *milleGBL ); }
         }
     }
 
 
     streamlog_out (DEBUG0) << "--------- new event ----" << endl;
-    // count events:
 
+    // count events:
     ++_iEvt;
     if( isFirstEvent() ) _isFirstEvent = false;
-
 }
 
 //------------------------------------------------------------------------------
@@ -1820,8 +1881,10 @@ void EUTelMilleGBL::end() {
     delete [] _waferResidX;
     delete [] _waferResidZ;
 
-    // close the output file:
-    delete milleGBL;
+    if (_milleInit == 1) {
+        // close the output file:
+        delete milleGBL;
+    }
 
     // if write the pede steering file
     if( _generatePedeSteerfile ) {
@@ -2044,7 +2107,7 @@ void EUTelMilleGBL::end() {
 
             steerFile.close();
 
-            streamlog_out( MESSAGE2 ) << "File " << _pedeSteerfileName << " written." << endl;
+            streamlog_out( MESSAGE4 ) << "File " << _pedeSteerfileName << " written." << endl;
 
         }
         else {
@@ -2053,9 +2116,10 @@ void EUTelMilleGBL::end() {
 
     } // end if write the pede steering file
 
-    streamlog_out( MESSAGE2 ) << endl;
+    streamlog_out( MESSAGE4 ) << endl;
     if(_aligntype == 0){  streamlog_out( MESSAGE4 ) << "Number of tracks for millipede: " << _nMilleTracksTotal << endl; }
     if(_aligntype == 1){  streamlog_out( MESSAGE4 ) << "Number of tracks for millipede: " << ntrk_REF_Total << endl; }
+    if(_aligntype == 2){  streamlog_out( MESSAGE4 ) << "Number of tracks for millipede: " << ntrk_DUT_Total << endl; }
 
     // if running pede using the generated steering file
 
@@ -2085,14 +2149,14 @@ void EUTelMilleGBL::end() {
             }
             else {
 
-                streamlog_out( MESSAGE2 ) << endl;
-                streamlog_out( MESSAGE2 ) << "Starting pede..." << endl;
-                streamlog_out( MESSAGE2 ) << command.c_str() << endl;
+                streamlog_out( MESSAGE4 ) << endl;
+                streamlog_out( MESSAGE4 ) << "Starting pede..." << endl;
+                streamlog_out( MESSAGE4 ) << command.c_str() << endl;
 
                 redi::ipstream pede( command.c_str() );
                 string output;
                 while ( getline( pede, output ) ) {
-                    streamlog_out( MESSAGE2 ) << output << endl;
+                    streamlog_out( MESSAGE4 ) << output << endl;
                 }
 
                 // wait for the pede execution to finish
@@ -2100,14 +2164,14 @@ void EUTelMilleGBL::end() {
 
                 // check the exit value of pede
                 if( pede.rdbuf()->status() == 0 ) {
-                    streamlog_out( MESSAGE2 ) << "Pede successfully finished" << endl;
+                    streamlog_out( MESSAGE4 ) << "Pede successfully finished" << endl;
                 }
 
                 // reading back the millepede.res file:
 
                 string millepedeResFileName = "millepede.res";
 
-                streamlog_out( MESSAGE2 ) << "Reading back the " << millepedeResFileName << endl
+                streamlog_out( MESSAGE4 ) << "Reading back the " << millepedeResFileName << endl
                                           << "Saving the alignment constant into " << _alignmentConstantLCIOFile << endl;
 
                 // open the millepede ASCII output file
@@ -2196,13 +2260,13 @@ void EUTelMilleGBL::end() {
 
                             bool isFixed = ( tokens.size() == 3 );
                             if( isFixed ) {
-                                streamlog_out( DEBUG1 )
+                                streamlog_out( DEBUG0 )
                                         << "Parameter " << tokens[0]
                                         << " is at " << ( tokens[1] / 1000 )
                                         << " (fixed)"  << endl;
                             }
                             else {
-                                streamlog_out( DEBUG1 )
+                                streamlog_out( DEBUG0 )
                                         << "Parameter " << tokens[0]
                                         << " is at " << (tokens[1] / 1000 )
                                         << " +/- " << ( tokens[4] / 1000 )  << endl;
@@ -2262,8 +2326,8 @@ void EUTelMilleGBL::end() {
 
     } // Pede wanted
 
-    streamlog_out( MESSAGE2 ) << endl;
-    streamlog_out( MESSAGE2 ) << "Successfully finished" << endl;
+    streamlog_out( MESSAGE4 ) << endl;
+    streamlog_out( MESSAGE4 ) << "Successfully finished" << endl;
 
 }//end
 
@@ -2273,134 +2337,220 @@ void EUTelMilleGBL::bookHistos() {
 #if defined(USE_AIDA) || defined(MARLIN_USE_AIDA)
 
     try {
-        streamlog_out( MESSAGE2 ) << "Booking histograms..." << endl;
+        streamlog_out( MESSAGE4 ) << "Booking histograms..." << endl;
 
         int lim = 1000; //the lim (from left and right) of res in um
         int bin = 10 ; //bin size in um
         int Nbin = 2*lim/bin+1;
 
-        //DP:
+        //Projections to the tel plane 0:
+        AIDAProcessor::tree(this)->cd(this->name());
+        string basePath = "Proj_to_Plane0";
+        AIDAProcessor::tree(this)->mkdir(basePath);
+        basePath.append("/");
+        AIDAProcessor::tree(this)->cd(basePath);
 
-        dx01Hist = AIDAProcessor::histogramFactory(this)->
-                createHistogram1D( "dx01", Nbin, -lim, lim );
-        dx01Hist->setTitle( "dx01;x_{1}-x_{0} [#mum];hit pairs" );
+        dx01Hist = new TH1D("dx01", "", Nbin, -lim, lim);
+        dx01Hist->SetTitle( "dx01;x_{1}-x_{0} [#mum];hit pairs" );
+        _rootObjectMap.insert(make_pair("dx01", dx01Hist));
+        dy01Hist = new TH1D("dy01", "", Nbin, -lim, lim);
+        dy01Hist->SetTitle( "dy01;y_{1}-y_{0} [#mum];hit pairs" );
+        _rootObjectMap.insert(make_pair("dy01", dy01Hist));
 
-        dy01Hist = AIDAProcessor::histogramFactory(this)->
-                createHistogram1D( "dy01", Nbin, -lim, lim );
-        dy01Hist->setTitle( "dy01;y_{1}-y_{0} [#mum];hit pairs" );
+        dx02Hist = new TH1D("dx02", "", Nbin, -lim, lim);
+        dx02Hist->SetTitle( "dx02;x_{2}-x_{0} [#mum];hit pairs" );
+        _rootObjectMap.insert(make_pair("dx02", dx02Hist));
+        dy02Hist = new TH1D("dy02", "", Nbin, -lim, lim);
+        dy02Hist->SetTitle( "dy02;y_{2}-y_{0} [#mum];hit pairs" );
+        _rootObjectMap.insert(make_pair("dy02", dy02Hist));
 
-        dx02Hist = AIDAProcessor::histogramFactory(this)->
-                createHistogram1D( "dx02", Nbin, -lim, lim );
-        dx02Hist->setTitle( "dx02;x_{2}-x_{0} [#mum];hit pairs" );
+        dx03Hist = new TH1D("dx03", "", Nbin, -lim, lim);
+        dx03Hist->SetTitle( "dx03;x_{3}-x_{0} [#mum];hit pairs" );
+        _rootObjectMap.insert(make_pair("dx03", dx03Hist));
+        dy03Hist = new TH1D("dy03", "", Nbin, -lim, lim);
+        dy03Hist->SetTitle( "dy03;y_{3}-y_{0} [#mum];hit pairs" );
+        _rootObjectMap.insert(make_pair("dy03", dy03Hist));
 
-        dy02Hist = AIDAProcessor::histogramFactory(this)->
-                createHistogram1D( "dy02", Nbin, -lim, lim );
-        dy02Hist->setTitle( "dy02;y_{2}-y_{0} [#mum];hit pairs" );
+        dx04Hist = new TH1D("dx04", "", Nbin, -lim, lim);
+        dx04Hist->SetTitle( "dx04;x_{4}-x_{0} [#mum];hit pairs" );
+        _rootObjectMap.insert(make_pair("dx04", dx04Hist));
+        dy04Hist = new TH1D("dy04", "", Nbin, -lim, lim);
+        dy04Hist->SetTitle( "dy04;y_{4}-y_{0} [#mum];hit pairs" );
+        _rootObjectMap.insert(make_pair("dy04", dy04Hist));
 
-        dx03Hist = AIDAProcessor::histogramFactory(this)->
-                createHistogram1D( "dx03", Nbin, -lim, lim );
-        dx03Hist->setTitle( "dx03;x_{3}-x_{0} [#mum];hit pairs" );
+        dx05Hist = new TH1D("dx05", "", Nbin, -lim, lim);
+        dx05Hist->SetTitle( "dx05;x_{5}-x_{0} [#mum];hit pairs" );
+        _rootObjectMap.insert(make_pair("dx05", dx05Hist));
+        dy05Hist = new TH1D("dy05", "", Nbin, -lim, lim);
+        dy05Hist->SetTitle( "dy05;y_{5}-y_{0} [#mum];hit pairs" );
+        _rootObjectMap.insert(make_pair("dy05", dy05Hist));
 
-        dy03Hist = AIDAProcessor::histogramFactory(this)->
-                createHistogram1D( "dy03", Nbin, -lim, lim );
-        dy03Hist->setTitle( "dy03;y_{3}-y_{0} [#mum];hit pairs" );
+        dx06Hist = new TH1D("dx06", "", Nbin, -lim, lim);
+        dx06Hist->SetTitle( "dx06;x_{6}-x_{0} [#mum];hit pairs" );
+        _rootObjectMap.insert(make_pair("dx06", dx06Hist));
+        dy06Hist = new TH1D("dy06", "", Nbin, -lim, lim);
+        dy06Hist->SetTitle( "dy06;y_{6}-y_{0} [#mum];hit pairs" );
+        _rootObjectMap.insert(make_pair("dy06", dy06Hist));
 
-        dx04Hist = AIDAProcessor::histogramFactory(this)->
-                createHistogram1D( "dx04", Nbin, -lim, lim );
-        dx04Hist->setTitle( "dx04;x_{4}-x_{0} [#mum];hit pairs" );
+        dx07Hist = new TH1D("dx07", "", Nbin, -lim, lim);
+        dx07Hist->SetTitle( "dx07;x_{7}-x_{0} [#mum];hit pairs" );
+        _rootObjectMap.insert(make_pair("dx07", dx07Hist));
+        dy07Hist = new TH1D("dy07", "", Nbin, -lim, lim);
+        dy07Hist->SetTitle( "dy07;y_{7}-y_{0} [#mum];hit pairs" );
+        _rootObjectMap.insert(make_pair("dy07", dy07Hist));
 
-        dy04Hist = AIDAProcessor::histogramFactory(this)->
-                createHistogram1D( "dy04", Nbin, -lim, lim );
-        dy04Hist->setTitle( "dy04;y_{4}-y_{0} [#mum];hit pairs" );
-
-        dx05Hist = AIDAProcessor::histogramFactory(this)->
-                createHistogram1D( "dx05", Nbin, -lim, lim );
-        dx05Hist->setTitle( "dx05;x_{5}-x_{0} [#mum];hit pairs" );
-
-        dy05Hist = AIDAProcessor::histogramFactory(this)->
-                createHistogram1D( "dy05", Nbin, -lim, lim );
-        dy05Hist->setTitle( "dy05;y_{5}-y_{0} [#mum];hit pairs" );
-
-        //triplet-driplet histos
-
+        //triplet-driplet histos: straight line tracks forming
         //triplet
-        tridxHist = AIDAProcessor::histogramFactory(this)->
-                createHistogram1D( "tridx", 4*_triCut+1, -2*_triCut, 2*_triCut );
-        tridxHist->setTitle( "tridx;x_{1}-x_{02} [#mum];triplet" );
+        AIDAProcessor::tree(this)->cd(this->name());
+        basePath = "Triplets";
+        AIDAProcessor::tree(this)->mkdir(basePath);
+        basePath.append("/");
+        basePath = "Triplets/Upstream_arm";
+        AIDAProcessor::tree(this)->mkdir(basePath);
+        basePath.append("/");
+        AIDAProcessor::tree(this)->cd(basePath);
 
-        tridyHist = AIDAProcessor::histogramFactory(this)->
-                createHistogram1D( "tridy", 4*_triCut+1, -2*_triCut, 2*_triCut );
-        tridyHist->setTitle( "tridy;y_{1}-y_{02} [#mum];triplet" );
+        tridxHist = new TH1D("tridx", "", 4*_triCut+1, -2*_triCut, 2*_triCut);
+        tridxHist->SetTitle( "tridx;x_{1}-x_{02} [#mum];Number of triplets" );
+        _rootObjectMap.insert(make_pair("tridx", dy07Hist));
 
-        tridx_noCut_Hist = AIDAProcessor::histogramFactory(this)->
-                createHistogram1D( "tridx_noCut", 10*_triCut+1, -5*_triCut, 5*_triCut );
-        tridx_noCut_Hist->setTitle( "tridx no triplet cut applied;x_{1}-x_{02} [#mum];triplet" );
+        tridyHist = new TH1D("tridy", "", 4*_triCut+1, -2*_triCut, 2*_triCut);
+        tridyHist->SetTitle( "tridy;y_{1}-y_{02} [#mum];Number of triplets" );
+        _rootObjectMap.insert(make_pair("tridy", dy07Hist));
 
-        tridy_noCut_Hist = AIDAProcessor::histogramFactory(this)->
-                createHistogram1D( "tridy_noCut", 10*_triCut+1, -5*_triCut, 5*_triCut );
-        tridy_noCut_Hist->setTitle( "tridy no triplet cut applied;y_{1}-y_{02} [#mum];triplet" );
+        tridx_noCut_Hist = new TH1D("tridx_noCut", "", 10*_triCut+1, -5*_triCut, 5*_triCut);
+        tridx_noCut_Hist->SetTitle( "tridx no triplet cut applied;x_{1}-x_{02} [#mum];Number of triplets" );
+        _rootObjectMap.insert(make_pair("tridx_noCut", tridx_noCut_Hist));
 
-        tridr_noCut_Hist = AIDAProcessor::histogramFactory(this)->
-                createHistogram1D( "tridr_noCut", 10*_triCut+1, -5*_triCut, 5*_triCut );
-        tridr_noCut_Hist->setTitle( "tridr, no driplet cut applied; r_{1}-r_{02} [#mum]; triplet" );
+        tridy_noCut_Hist = new TH1D("tridy_noCut", "", 10*_triCut+1, -5*_triCut, 5*_triCut);
+        tridy_noCut_Hist->SetTitle( "tridy no triplet cut applied;y_{1}-y_{02} [#mum];Number of triplets" );
+        _rootObjectMap.insert(make_pair("tridy_noCut", tridy_noCut_Hist));
 
-        ntriHist = AIDAProcessor::histogramFactory(this)->
-                createHistogram1D( "ntri", 21, -0.5, 20.5 );
-        ntriHist->setTitle( "Number of triplets distr.; Number of triplets per event; Numb. of Events" );
+        tridr_noCut_Hist = new TH1D("tridr_noCut", "", 10*_triCut+1, -5*_triCut, 5*_triCut);
+        tridr_noCut_Hist->SetTitle( "tridr no triplet cut applied;r_{1}-r_{02} [#mum];Number of triplets" );
+        _rootObjectMap.insert(make_pair("tridr_noCut", tridr_noCut_Hist));
+
+        triSlopeXHist = new TH1D("triSlopeXHist", "", 20*2+1, -0.01, 0.01 );
+        triSlopeXHist->SetTitle( "Triplet's line X slope; Slope [rad]; Numb. of events");
+        _rootObjectMap.insert(make_pair("triSlopeXHist", triSlopeXHist));
+
+        triSlopeYHist = new TH1D("triSlopeYHist", "", 20*2+1, -0.01, 0.01 );
+        triSlopeYHist->SetTitle( "Triplet's line Y slope; Slope [rad]; Numb. of events");
+        _rootObjectMap.insert(make_pair("triSlopeYHist", triSlopeYHist));
+
+        ntriHist = new TH1D("ntri", "", 21, -0.5, 20.5 );
+        ntriHist->SetTitle( "Number of triplets distr.; Number of triplets per event; Numb. of Events" );
+        _rootObjectMap.insert(make_pair("ntri", ntriHist));
 
         //driplet
-        dridxHist = AIDAProcessor::histogramFactory(this)->
-                createHistogram1D( "dridx", 4*_driCut+1, -2*_driCut, 2*_driCut );
-        dridxHist->setTitle( "dridx;x_{4}-x_{35} [#mum];triplet" );
 
-        dridyHist = AIDAProcessor::histogramFactory(this)->
-                createHistogram1D( "dridy", 4*_driCut+1, -2*_driCut, 2*_driCut );
-        dridyHist->setTitle( "dridy;y_{4}-y_{35} [#mum];triplet" );
+        AIDAProcessor::tree(this)->cd(this->name());
+        basePath = "Triplets";
+        AIDAProcessor::tree(this)->cd(basePath);
+        basePath.append("/");
+        basePath = "Triplets/Downstream_arm";
+        AIDAProcessor::tree(this)->mkdir(basePath);
+        basePath.append("/");
+        AIDAProcessor::tree(this)->cd(basePath);
 
-        dridx_noCut_Hist = AIDAProcessor::histogramFactory(this)->
-                createHistogram1D( "dridx_noCut", 10*_driCut+1, -5*_driCut, 5*_driCut );
-        dridx_noCut_Hist->setTitle( "dridx, no driplet cut applied;x_{4}-x_{35} [#mum];triplet" );
+        dridxHist = new TH1D("dridx", "", 4*_driCut+1, -2*_driCut, 2*_driCut);
+        dridxHist->SetTitle( "dridx;x_{4}-x_{35} [#mum];Number of driplets" );
+        _rootObjectMap.insert(make_pair("dridx", dy07Hist));
 
-        dridy_noCut_Hist = AIDAProcessor::histogramFactory(this)->
-                createHistogram1D( "dridy_noCut", 10*_driCut+1, -5*_driCut, 5*_driCut );
-        dridy_noCut_Hist->setTitle( "dridy, no driplet cut applied;y_{4}-y_{35} [#mum];triplet" );
+        dridyHist = new TH1D("dridy", "", 4*_driCut+1, -2*_driCut, 2*_driCut);
+        dridyHist->SetTitle( "dridy;y_{4}-y_{35} [#mum];Number of driplets" );
+        _rootObjectMap.insert(make_pair("dridy", dy07Hist));
 
-        dridr_noCut_Hist = AIDAProcessor::histogramFactory(this)->
-                createHistogram1D( "dridr_noCut", 10*_driCut+1, -5*_driCut, 5*_driCut );
-        dridr_noCut_Hist->setTitle( "dridr, no driplet cut applied; r_{4}-r_{35} [#mum]; triplet" );
+        dridx_noCut_Hist = new TH1D("dridx_noCut", "", 10*_driCut+1, -5*_driCut, 5*_driCut);
+        dridx_noCut_Hist->SetTitle( "dridx no driplet cut applied;x_{4}-x_{35} [#mum];Number of driplets" );
+        _rootObjectMap.insert(make_pair("dridx_noCut", dridx_noCut_Hist));
 
-        ndriHist = AIDAProcessor::histogramFactory(this)->
-                createHistogram1D( "ndri", 21, -0.5, 20.5 );
-        ndriHist->setTitle( "Number of driplets distr.; Number of driplets per event; Numb. of Events" );
+        dridy_noCut_Hist = new TH1D("dridy_noCut", "", 10*_driCut+1, -5*_driCut, 5*_driCut);
+        dridy_noCut_Hist->SetTitle( "dridy no driplet cut applied;y_{4}-y_{35} [#mum];Number of driplets" );
+        _rootObjectMap.insert(make_pair("dridy_noCut", dridy_noCut_Hist));
+
+        dridr_noCut_Hist = new TH1D("dridr_noCut", "", 10*_driCut+1, -5*_driCut, 5*_driCut);
+        dridr_noCut_Hist->SetTitle( "dridr no driplet cut applied;r_{4}-r_{35} [#mum];Number of driplets" );
+        _rootObjectMap.insert(make_pair("dridr_noCut", dridr_noCut_Hist));
+
+        driSlopeXHist = new TH1D("driSlopeXHist", "", 20*2+1, -0.01, 0.01 );
+        driSlopeXHist->SetTitle( "driplet's line X slope; Slope [rad]; Numb. of events");
+        _rootObjectMap.insert(make_pair("driSlopeXHist", driSlopeXHist));
+
+        driSlopeYHist = new TH1D("driSlopeYHist", "", 20*2+1, -0.01, 0.01 );
+        driSlopeYHist->SetTitle( "driplet's line Y slope; Slope [rad]; Numb. of events");
+        _rootObjectMap.insert(make_pair("driSlopeYHist", driSlopeYHist));
+
+        ndriHist = new TH1D("ndri", "", 21, -0.5, 20.5 );
+        ndriHist->SetTitle( "Number of driplets distr.; Number of driplets per event; Numb. of Events" );
+        _rootObjectMap.insert(make_pair("ndri", ndriHist));
 
         //tracks (triplet-driplet matching)
-        sixdxHist = AIDAProcessor::histogramFactory(this)->
-                createHistogram1D( "sixdx", 4*_sixCut+1, -2*_sixCut, 2*_sixCut );
-        sixdxHist->setTitle( "Triplet-driplet X displacement at DUT pos. ; x_{upstream}-x_{downstream} [#mum]; Number of tracks" );
+        AIDAProcessor::tree(this)->cd(this->name());
+        basePath = "Triplets";
+        AIDAProcessor::tree(this)->cd(basePath);
+        basePath.append("/");
+        basePath = "Triplets/StraightLine_tracks";
+        AIDAProcessor::tree(this)->mkdir(basePath);
+        basePath.append("/");
+        AIDAProcessor::tree(this)->cd(basePath);
 
-        sixdyHist = AIDAProcessor::histogramFactory(this)->
-                createHistogram1D( "sixdy", 4*_sixCut+1, -2*_sixCut, 2*_sixCut );
-        sixdyHist->setTitle( "Triplet-driplet Y displacement at the DUT pos. ; y_{upstream}-y_{downstream} [#mum]; Number of tracks" );
+        sixdxHist = new TH1D("sixdx", "", 4*_sixCut+1, -2*_sixCut, 2*_sixCut);
+        sixdxHist->SetTitle( "Triplet-driplet X displacement at DUT pos. ; x_{upstream}-x_{downstream} [#mum]; Number of tracks"  );
+        _rootObjectMap.insert(make_pair("sixdx", dy07Hist));
 
-        sixdx_noCut_Hist = AIDAProcessor::histogramFactory(this)->
-                createHistogram1D( "sixdx_noCut", 10*_sixCut+1, -5*_sixCut, 5*_sixCut );
-        sixdx_noCut_Hist->setTitle( "Triplet-driplet X displacement at the DUT pos. (no trk Cuts applied) ; x_{upstream}-x_{downstream} [#mum]; Number of tracks" );
+        sixdyHist = new TH1D("sixdy", "", 4*_sixCut+1, -2*_sixCut, 2*_sixCut);
+        sixdyHist->SetTitle( "Triplet-driplet Y displacement at DUT pos. ; y_{upstream}-y_{downstream} [#mum]; Number of tracks"  );
+        _rootObjectMap.insert(make_pair("sixdy", dy07Hist));
 
-        sixdy_noCut_Hist = AIDAProcessor::histogramFactory(this)->
-                createHistogram1D( "sixdy_noCut", 10*_sixCut+1, -5*_sixCut, 5*_sixCut );
-        sixdy_noCut_Hist->setTitle( "Triplet-driplet Y displacement at the DUT pos. (no trk Cuts applied) ; y_{upstream}-y_{downstream} [#mum]; Number of tracks" );
+        sixdx_noCut_Hist = new TH1D("sixdx_noCut", "", 10*_sixCut+1, -5*_sixCut, 5*_sixCut);
+        sixdx_noCut_Hist->SetTitle( "Triplet-driplet X displacement at the DUT pos. (no trk Cuts applied) ; x_{upstream}-x_{downstream} [#mum]; Number of tracks" );
+        _rootObjectMap.insert(make_pair("sixdx_noCut", sixdx_noCut_Hist));
 
-        sixdr_noCut_Hist = AIDAProcessor::histogramFactory(this)->
-                createHistogram1D( "sixdr_noCut", 10*_sixCut+1, -5*_sixCut, 5*_sixCut );
-        sixdr_noCut_Hist->setTitle( "Triplet-driplet displacement at the DUT pos. (no trk Cuts applied) ; r_{upstream}-r_{downstream} [#mum]; Number of tracks" );
+        sixdy_noCut_Hist = new TH1D("sixdy_noCut", "", 10*_sixCut+1, -5*_sixCut, 5*_sixCut);
+        sixdy_noCut_Hist->SetTitle( "Triplet-driplet Y displacement at the DUT pos. (no trk Cuts applied) ; y_{upstream}-y_{downstream} [#mum]; Number of tracks" );
+        _rootObjectMap.insert(make_pair("sixdy_noCut", sixdy_noCut_Hist));
 
-        sixkxHist = AIDAProcessor::histogramFactory(this)->
-                createHistogram1D( "sixkx", 100, -25, 25 );
-        sixkxHist->setTitle( "Triplet-driplet X kink at the DUT pos.;x kink angle [mrad];Number of tracks" );
+        sixdr_noCut_Hist = new TH1D("sixdr_noCut", "", 10*_sixCut+1, -5*_sixCut, 5*_sixCut);
+        sixdr_noCut_Hist->SetTitle( "Triplet-driplet absolute displacement at the DUT pos. (no trk Cuts applied) ; r_{upstream}-r_{downstream} [#mum]; Number of tracks" );
+        _rootObjectMap.insert(make_pair("sixdr_noCut", sixdr_noCut_Hist));
 
-        sixkyHist = AIDAProcessor::histogramFactory(this)->
-                createHistogram1D( "sixky", 100, -25, 25 );
-        sixkyHist->setTitle( "Triplet-driplet Y kink at the DUT pos.;y kink angle [mrad];Number of tracks" );
+        sixkxHist = new TH1D("sixkx", "", 100, -25, 25);
+        sixkxHist->SetTitle( "Triplet-driplet X kink at the DUT pos.;x kink angle [mrad];Number of tracks" );
+        _rootObjectMap.insert(make_pair("sixkx", sixkxHist));
+
+        sixkyHist = new TH1D("sixky", "", 100, -25, 25);
+        sixkyHist->SetTitle( "Triplet-driplet Y kink at the DUT pos.;y kink angle [mrad];Number of tracks" );
+        _rootObjectMap.insert(make_pair("sixky", sixkyHist));
+
+        nmHist = new TH1D("nm", "", 21, -0.5, 20.5 );
+        nmHist->SetTitle( "Straight line track matched;Numb. of tracks;Numb. of events" );
+        _rootObjectMap.insert(make_pair("nm", nmHist));
+
+        hTripletsMatched_DUT = new TH1D("hTripletsMatched_DUT", "", 21, -0.5, 20.5 );
+        hTripletsMatched_DUT->SetTitle( "Tracks matched per event, DUT hits are presented;Number of matched tracks;Numb. of Events" );
+        _rootObjectMap.insert(make_pair("hTripletsMatched_DUT", hTripletsMatched_DUT));
+
+        hTripletsMatched_DUT_2D = new TH2D("hTripletsMatched_DUTvsEv", "", _nmax, 0, _nmax - 1, 21, -0.5, 20.5 );
+        hTripletsMatched_DUT_2D->SetTitle( "Tracks matched per event vs. event, DUT hits are presented; Event number ; Number of matched tracks" );
+        _rootObjectMap.insert(make_pair("hTripletsMatched_DUTvsEv", hTripletsMatched_DUT_2D));
+
+        hTripletsMatched_REF = new TH1D("hTripletsMatched_REF", "", 21, -0.5, 20.5 );
+        hTripletsMatched_REF->SetTitle( "Tracks matched per event, REF hits are presented;Number of matched tracks;Numb. of Events" );
+        _rootObjectMap.insert(make_pair("hTripletsMatched_REF", hTripletsMatched_REF));
+
+        hTripletsMatched_REF_2D = new TH2D("hTripletsMatched_REFvsEv", "", _nmax, 0, _nmax - 1, 21, -0.5, 20.5 );
+        hTripletsMatched_REF_2D->SetTitle( "Tracks matched per event vs. event, REF hits are presented; Event number ; Number of matched tracks" );
+        _rootObjectMap.insert(make_pair("hTripletsMatched_REFvsEv", hTripletsMatched_REF_2D));
+
+        hTripletsMatched_DUT_REF = new TH1D("hTripletsMatched_DUT_REF", "", 21, -0.5, 20.5 );
+        hTripletsMatched_DUT_REF->SetTitle( "Tracks matched per event, DUT_REF hits are presented;Number of matched tracks;Numb. of Events" );
+        _rootObjectMap.insert(make_pair("hTripletsMatched_DUT_REF", hTripletsMatched_DUT_REF));
+
+        hTripletsMatched_DUT_REF_2D = new TH2D("hTripletsMatched_DUT_REFvsEv", "", _nmax, 0, _nmax - 1, 21, -0.5, 20.5 );
+        hTripletsMatched_DUT_REF_2D->SetTitle( "Tracks matched per event vs. event, DUT and REF hits are presented; Event number ; Number of matched tracks" );
+        _rootObjectMap.insert(make_pair("hTripletsMatched_DUT_REFvsEv", hTripletsMatched_DUT_REF_2D));
+
 
         // GBL:
 
@@ -2581,30 +2731,32 @@ void EUTelMilleGBL::bookHistos() {
         goody6Hist->setTitle( "Triplet residual y at 6, good GBL;#Deltay (residual) on plane 1 [#mum];Number of tracks" );
 
         // look at fit:
+        double lim_gblHist = 150;
+        if(lim_gblHist < _sixCut) { lim_gblHist = _sixCut; } // cut as it was on the first step, to have the same scale at each step
 
         gblax0Hist = AIDAProcessor::histogramFactory(this)->
-                createHistogram1D( "gblax0", 100, -25, 25 );
+                createHistogram1D( "gblax0", 1000, -25, 25 );
         gblax0Hist->setTitle( "GBL angle at plane 0;x angle at plane 0 [mrad];tracks" );
 
         gbldx0Hist = AIDAProcessor::histogramFactory(this)->
-                createHistogram1D( "gbldx0", 100, -2500, 2500 );
+                createHistogram1D( "gbldx0", 20*lim_gblHist+1, -10*lim_gblHist, 10*lim_gblHist  );
         gbldx0Hist->setTitle( "GBL shift at plane 0;x shift at plane 0 [#mum];tracks" );
 
         gblrx0Hist = AIDAProcessor::histogramFactory(this)->
-                createHistogram1D( "gblrx0", 100, -250, 250 );
+                createHistogram1D( "gblrx0", 20*lim_gblHist+1, -10*lim_gblHist, 10*lim_gblHist );
         gblrx0Hist->setTitle( "GBL resid at plane 0;x resid at plane 0 [#mum];tracks" );
 
 
         gblax1Hist = AIDAProcessor::histogramFactory(this)->
-                createHistogram1D( "gblax1", 2*_sixCut+1, -_sixCut, _sixCut  );
+                createHistogram1D( "gblax1",1000, -25, 25  );
         gblax1Hist->setTitle( "GBL angle at plane 1;x angle at plane 1 [mrad];tracks" );
 
         gbldx1Hist = AIDAProcessor::histogramFactory(this)->
-                createHistogram1D( "gbldx1", 2*_sixCut+1, -_sixCut, _sixCut  );
+                createHistogram1D( "gbldx1", 20*lim_gblHist+1, -10*lim_gblHist, 10*lim_gblHist   );
         gbldx1Hist->setTitle( "GBL shift at plane 1;x shift at plane 1 [#mum];tracks" );
 
         gblrx1Hist = AIDAProcessor::histogramFactory(this)->
-                createHistogram1D( "gblrx1", 2*_sixCut+1, -_sixCut, _sixCut  );
+                createHistogram1D( "gblrx1", 20*lim_gblHist+1, -10*lim_gblHist, 10*lim_gblHist   );
         gblrx1Hist->setTitle( "GBL resid at plane 1;x resid at plane 1 [#mum];tracks" );
 
 
@@ -2613,11 +2765,11 @@ void EUTelMilleGBL::bookHistos() {
         gblax2Hist->setTitle( "GBL angle at plane 2;x angle at plane 2 [mrad];tracks" );
 
         gbldx2Hist = AIDAProcessor::histogramFactory(this)->
-                createHistogram1D( "gbldx2", 2*_sixCut+1, -_sixCut, _sixCut  );
+                createHistogram1D( "gbldx2", 20*lim_gblHist+1, -10*lim_gblHist, 10*lim_gblHist );
         gbldx2Hist->setTitle( "GBL shift at plane 2;x shift at plane 2 [#mum];tracks" );
 
         gblrx2Hist = AIDAProcessor::histogramFactory(this)->
-                createHistogram1D( "gblrx2", 2*_sixCut+1, -_sixCut, _sixCut );
+                createHistogram1D( "gblrx2", 20*lim_gblHist+1, -10*lim_gblHist, 10*lim_gblHist );
         gblrx2Hist->setTitle( "GBL resid at plane 2;x resid at plane 2 [#mum];tracks" );
 
 
@@ -2626,11 +2778,11 @@ void EUTelMilleGBL::bookHistos() {
         gblax3Hist->setTitle( "GBL angle at plane 3;x angle at plane 3 [mrad];tracks" );
 
         gbldx3Hist = AIDAProcessor::histogramFactory(this)->
-                createHistogram1D( "gbldx3", 2*_sixCut+1, -_sixCut, _sixCut  );
+                createHistogram1D( "gbldx3", 20*lim_gblHist+1, -10*lim_gblHist, 10*lim_gblHist  );
         gbldx3Hist->setTitle( "GBL shift at plane 3;x shift at plane 3 [#mum];tracks" );
 
         gblrx3Hist = AIDAProcessor::histogramFactory(this)->
-                createHistogram1D( "gblrx3", 2*_sixCut+1, -_sixCut, _sixCut  );
+                createHistogram1D( "gblrx3", 20*lim_gblHist+1, -10*lim_gblHist, 10*lim_gblHist );
         gblrx3Hist->setTitle( "GBL resid at plane 3;x resid at plane 3 [#mum];tracks" );
 
 
@@ -2639,11 +2791,11 @@ void EUTelMilleGBL::bookHistos() {
         gblax4Hist->setTitle( "GBL angle at plane 4;x angle at plane 4 [mrad];tracks" );
 
         gbldx4Hist = AIDAProcessor::histogramFactory(this)->
-                createHistogram1D( "gbldx4", 2*_sixCut+1, -_sixCut, _sixCut  );
+                createHistogram1D( "gbldx4", 20*lim_gblHist+1, -10*lim_gblHist, 10*lim_gblHist );
         gbldx4Hist->setTitle( "GBL shift at plane 4;x shift at plane 4 [#mum];tracks" );
 
         gblrx4Hist = AIDAProcessor::histogramFactory(this)->
-                createHistogram1D( "gblrx4", 2*_sixCut+1, -_sixCut, _sixCut  );
+                createHistogram1D( "gblrx4", 20*lim_gblHist+1, -10*lim_gblHist, 10*lim_gblHist  );
         gblrx4Hist->setTitle( "GBL resid at plane 4;x resid at plane 4 [#mum];tracks" );
 
 
@@ -2652,11 +2804,11 @@ void EUTelMilleGBL::bookHistos() {
         gblax5Hist->setTitle( "GBL angle at plane 5;x angle at plane 5 [mrad];tracks" );
 
         gbldx5Hist = AIDAProcessor::histogramFactory(this)->
-                createHistogram1D( "gbldx5", 2*_sixCut+1, -_sixCut, _sixCut  );
+                createHistogram1D( "gbldx5", 20*lim_gblHist+1, -10*lim_gblHist, 10*lim_gblHist  );
         gbldx5Hist->setTitle( "GBL shift at plane 5;x shift at plane 5 [#mum];tracks" );
 
         gblrx5Hist = AIDAProcessor::histogramFactory(this)->
-                createHistogram1D( "gblrx5", 2*_sixCut+1, -_sixCut, _sixCut  );
+                createHistogram1D( "gblrx5", 20*lim_gblHist+1, -10*lim_gblHist, 10*lim_gblHist  );
         gblrx5Hist->setTitle( "GBL resid at plane 5;x resid at plane 5 [#mum];tracks" );
 
 
@@ -2665,19 +2817,19 @@ void EUTelMilleGBL::bookHistos() {
         gblax6Hist->setTitle( "GBL angle at DUT;x angle at DUT [mrad];tracks" );
 
         gbldx6Hist = AIDAProcessor::histogramFactory(this)->
-                createHistogram1D( "gbldx6", 2*_sixCut+1, -_sixCut, _sixCut );
+                createHistogram1D( "gbldx6", 20*lim_gblHist+1, -10*lim_gblHist, 10*lim_gblHist );
         gbldx6Hist->setTitle( "GBL shift at DUT;x shift at DUT [#mum];tracks" );
 
         gbldy6Hist = AIDAProcessor::histogramFactory(this)->
-                createHistogram1D( "gbldy6", 2*_sixCut+1, -_sixCut, _sixCut );
+                createHistogram1D( "gbldy6", 20*lim_gblHist+1, -10*lim_gblHist, 10*lim_gblHist );
         gbldy6Hist->setTitle( "GBL shift at DUT;y shift at DUT [#mum];tracks" );
 
         gblrx6Hist = AIDAProcessor::histogramFactory(this)->
-                createHistogram1D( "gblrx6", 2*_sixCut+1, -_sixCut, _sixCut );
+                createHistogram1D( "gblrx6", 20*lim_gblHist+1, -10*lim_gblHist, 10*lim_gblHist );
         gblrx6Hist->setTitle( "GBL resid at DUT;x resid at DUT [#mum];tracks" );
 
         gblry6Hist = AIDAProcessor::histogramFactory(this)->
-                createHistogram1D( "gblry6", 2*_sixCut+1, -_sixCut, _sixCut );
+                createHistogram1D( "gblry6", 20*lim_gblHist+1, -10*lim_gblHist, 10*lim_gblHist );
         gblry6Hist->setTitle( "GBL resid at DUT;y resid at DUT [#mum];tracks" );
 
 
@@ -2705,63 +2857,44 @@ void EUTelMilleGBL::bookHistos() {
                 createHistogram1D( "gblkx6", 1000, -5, 5 );
         gblkx6Hist->setTitle( "GBL kink angle at plane 6;plane 6 kink [mrad];tracks" );
 
-        nmHist = AIDAProcessor::histogramFactory(this)->
-                createHistogram1D( "nm", 21, -0.5, 20.5 );
-        nmHist->setTitle( "track matches;track matches;events" );
-
-        hTripletsMatched_DUT = AIDAProcessor::histogramFactory(this)->
-                createHistogram1D( "hTripletsMatched_DUT", 21, -0.5, 20.5 );
-        hTripletsMatched_DUT->setTitle( "Tracks matched per event, DUT hits are presented;Number of matched tracks;Numb. of Events" );
-
-        hTripletsMatched_DUT_2D = AIDAProcessor::histogramFactory(this)->
-                createHistogram2D( "hTripletsMatched_DUTvsEv", _nmax, 0, _nmax - 1, 21, -0.5, 20.5 );
-        hTripletsMatched_DUT_2D->setTitle( "Tracks matched per event vs. event, DUT hits are presented; Event number ; Number of matched tracks" );
-
-        hTripletsMatched_REF = AIDAProcessor::histogramFactory(this)->
-                createHistogram1D( "hTripletsMatched_REF", 21, -0.5, 20.5 );
-        hTripletsMatched_REF->setTitle( "Tracks matched per event, REF hits are presented;Number of matched tracks;Numb. of Events" );
-
-        hTripletsMatched_REF_2D = AIDAProcessor::histogramFactory(this)->
-                createHistogram2D( "hTripletsMatched_REFvsEv", _nmax, 0, _nmax - 1, 21, -0.5, 20.5 );
-        hTripletsMatched_REF_2D->setTitle( "Tracks matched per event vs. event, REF hits are presented; Event number ; Number of matched tracks" );
-
-        hTripletsMatched_DUT_REF = AIDAProcessor::histogramFactory(this)->
-                createHistogram1D( "hTripletsMatched_DUT_REF", 21, -0.5, 20.5 );
-        hTripletsMatched_DUT_REF->setTitle( "Tracks matched per event, DUT and REF hits are presented;Number of matched tracks;Numb. of Events" );
-
-        hTripletsMatched_DUT_REF_2D = AIDAProcessor::histogramFactory(this)->
-                createHistogram2D( "hTripletsMatched_DUT_REFvsEv", _nmax, 0, _nmax - 1, 21, -0.5, 20.5 );
-        hTripletsMatched_DUT_REF_2D->setTitle( "Tracks matched per event vs. event, DUT and REF hits are presented; Event number ; Number of matched tracks" );
-
         //tracks matched to REF
         hTrk_REF = AIDAProcessor::histogramFactory(this)->
                 createHistogram1D( "hTrk_REF", 21, -0.5, 20.5 );
         hTrk_REF->setTitle( "Tracks matched to REF hits;Number of matched tracks; ; Numb. of Events" );
 
+        int scale = 10;
         hTrk_REF_dx_noCut = AIDAProcessor::histogramFactory(this)->
-                createHistogram1D( "hTrk_REF_dx_noCut", 10*_drirefCut+1, -5*_drirefCut, 5*_drirefCut );
+                createHistogram1D( "hTrk_REF_dx_noCut", 2*scale*_drirefCut+1, -scale*_drirefCut, scale*_drirefCut );
         hTrk_REF_dx_noCut->setTitle( "Track-REF X displacement (no DriRefCut applied) ; x_{REF}-x_{driplet} [#mum]; Number of tracks" );
 
         hTrk_REF_dy_noCut = AIDAProcessor::histogramFactory(this)->
-                createHistogram1D( "hTrk_REF_dy_noCut", 10*_drirefCut+1, -5*_drirefCut, 5*_drirefCut );
+                createHistogram1D( "hTrk_REF_dy_noCut", 2*scale*_drirefCut+1, -scale*_drirefCut, scale*_drirefCut );
         hTrk_REF_dy_noCut->setTitle( "Track-REF Y displacement (no DriRefCut applied) ; y_{REF}-y_{driplet} [#mum]; Number of tracks" );
 
         hTrk_REF_dr_noCut = AIDAProcessor::histogramFactory(this)->
-                createHistogram1D( "hTrk_REF_dr_noCut", 10*_drirefCut+1, -5*_drirefCut, 5*_drirefCut );
+                createHistogram1D( "hTrk_REF_dr_noCut", 2*scale*_drirefCut+1, -scale*_drirefCut, scale*_drirefCut );
         hTrk_REF_dr_noCut->setTitle( "Track-REF displacement (no DriRefCut applied) ; r_{REF}-r_{driplet} [#mum]; Number of tracks" );
 
         hTrk_REF_dx = AIDAProcessor::histogramFactory(this)->
-                createHistogram1D( "hTrk_REF_dx", 10*_drirefCut+1, -5*_drirefCut, 5*_drirefCut );
+                createHistogram1D( "hTrk_REF_dx", 2*scale*_drirefCut+1, -scale*_drirefCut, scale*_drirefCut );
         hTrk_REF_dx->setTitle( "Track-REF X displacement ; x_{REF}-x_{driplet} [#mum]; Number of tracks" );
 
         hTrk_REF_dy = AIDAProcessor::histogramFactory(this)->
-                createHistogram1D( "hTrk_REF_dy", 10*_drirefCut+1, -5*_drirefCut, 5*_drirefCut );
+                createHistogram1D( "hTrk_REF_dy", 2*scale*_drirefCut+1, -scale*_drirefCut, scale*_drirefCut );
         hTrk_REF_dy->setTitle( "Track-REF Y displacement ; y_{REF}-y_{driplet} [#mum]; Number of tracks" );
 
         //tracks matched to DUT
         hTrk_DUT = AIDAProcessor::histogramFactory(this)->
                 createHistogram1D( "hTrk_DUT", 21, -0.5, 20.5 );
         hTrk_DUT->setTitle( "Tracks matched to DUT hits;Number of matched tracks; ; Numb. of Events" );
+
+        hTrk_DUT_dy_triplet_noCut = AIDAProcessor::histogramFactory(this)->
+                createHistogram1D( "hTrk_DUT_dy_triplet_noCut", 2*scale*_tridutCut+1, -scale*_tridutCut, scale*_tridutCut );
+        hTrk_DUT_dy_triplet_noCut->setTitle( "Track_triplet-DUT Y displacement ; y_{DUT}-y_{triplet} [#mum]; Number of tracks" );
+
+        hTrk_DUT_dy_driplet_noCut = AIDAProcessor::histogramFactory(this)->
+                createHistogram1D( "hTrk_DUT_dy_driplet_noCut", 2*scale*_dridutCut+1, -scale*_dridutCut, scale*_dridutCut );
+        hTrk_DUT_dy_driplet_noCut->setTitle( "Track_driplet-DUT Y displacement ; y_{DUT}-y_{driplet} [#mum]; Number of tracks" );
 
 
     }//try
